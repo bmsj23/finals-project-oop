@@ -115,8 +115,8 @@ public:
         cout << "Location: " << location << endl;
         cout << "Show Time: " << showTime << endl;
         cout << "Quantity: " << quantity << endl;
-        cout << "Price per ticket: $" << price << endl;
-        cout << "Total price: $" << getTotalPrice() << endl;
+        cout << "Price per ticket: P" << price << endl;
+        cout << "Total price: P" << getTotalPrice() << endl;
     }
 };
 
@@ -185,7 +185,7 @@ public:
             cout << "\n" << (i + 1) << ". Movie Name: " << movies[i][0] << "\n";
             cout << "   Synopsis: " << movies[i][1] << "\n";
             cout << "   Runtime: " << movies[i][2] << "\n";
-            cout << "   Price: $" << movies[i][3] << "\n";
+            cout << "   Price: P" << movies[i][3] << "\n";
             cout << "   Available Seats: " << movies[i][4] << "\n";
             cout << "   Location: " << movies[i][5] << "\n";
         }
@@ -263,7 +263,7 @@ void purchaseTickets() {
         cout << "Synopsis: " << movies[movieChoice][1] << endl;
         cout << "Runtime: " << movies[movieChoice][2] << endl;
         cout << "Location: " << selectedLocation << endl;
-        cout << "Price per ticket: $" << movies[movieChoice][3] << endl;
+        cout << "Price per ticket: P" << movies[movieChoice][3] << endl;
 
         char proceed;
         do {
