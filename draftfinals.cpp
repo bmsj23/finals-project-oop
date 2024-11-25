@@ -71,18 +71,57 @@ public:
     }
 };
 
+class Ticket {
+private:
+    string movieName;
+    string location;
+    string showTime;
+    double price;
+    int quantity;
+    bool isValid;
+
+public:
+    // Default constructor
+    Ticket() : movieName(""), location(""), showTime(""), price(0.0), quantity(0), isValid(false) {}
+
+    // Parameterized constructor
+    Ticket(string movie, string loc, string time, double ticketPrice, int qty)
+        : movieName(movie), location(loc), showTime(time), price(ticketPrice), quantity(qty), isValid(true) {}
+
+    // Getter methods
+    string getMovieName() const { return movieName; }
+    string getLocation() const { return location; }
+    string getShowTime() const { return showTime; }
+    double getPrice() const { return price; }
+    int getQuantity() const { return quantity; }
+    bool getIsValid() const { return isValid; }
+
+    // Setter methods
+    void setMovieName(const string& movie) { movieName = movie; }
+    void setLocation(const string& loc) { location = loc; }
+    void setShowTime(const string& time) { showTime = time; }
+    void setPrice(double ticketPrice) { price = ticketPrice; }
+    void setQuantity(int qty) { quantity = qty; }
+    void setIsValid(bool valid) { isValid = valid; }
+
+    // Calculate total price
+    double getTotalPrice() const {
+        return price * quantity;
+    }
+
+    // Display ticket details
+    void displayTicketDetails() const {
+        cout << "Movie: " << movieName << endl;
+        cout << "Location: " << location << endl;
+        cout << "Show Time: " << showTime << endl;
+        cout << "Quantity: " << quantity << endl;
+        cout << "Price per ticket: $" << price << endl;
+        cout << "Total price: $" << getTotalPrice() << endl;
+    }
+};
+
 class Customer : public User {
 private:
-    // dto naka store ticketzz
-    struct Ticket {
-        string movieName;
-        string location;
-        string showTime;
-        double price;
-        int quantity;
-        bool isValid = false;
-    };
-    
     Ticket ticketHistory[50];
     int ticketCount = 0;
 
@@ -285,16 +324,10 @@ void purchaseTickets() {
 
         // store ticket in history
         if (ticketCount < 50) {
-            ticketHistory[ticketCount].movieName = movies[movieChoice][0];
-            ticketHistory[ticketCount].location = selectedLocation;
-            ticketHistory[ticketCount].showTime = "Today";  // Simplified
-            ticketHistory[ticketCount].price = stod(movies[movieChoice][3]);
-            ticketHistory[ticketCount].quantity = numTickets;
-            ticketHistory[ticketCount].isValid = true;
+            ticketHistory[ticketCount] = Ticket(movies[movieChoice][0], selectedLocation, "Today", stod(movies[movieChoice][3]), numTickets);
             ticketCount++;
-            
             cout << "Tickets booked successfully!\n";
-        } else {
+        }else {
             cout << "Ticket history is full.\n";
         }
 
@@ -315,16 +348,11 @@ void purchaseTickets() {
         cout << "\nMy Tickets:\n";
         bool hasTickets = false;
         
-        for (int i = 0; i < 50; i++) {
-            if (ticketHistory[i].isValid) {
+        for (int i = 0; i < ticketCount; i++) {
+            if (ticketHistory[i].getIsValid()) {
                 hasTickets = true;
                 cout << "\nTicket #" << (i + 1) << ":\n";
-                cout << "Movie: " << ticketHistory[i].movieName << endl;
-                cout << "Location: " << ticketHistory[i].location << endl;
-                cout << "Show Time: " << ticketHistory[i].showTime << endl;
-                cout << "Quantity: " << ticketHistory[i].quantity << endl;
-                cout << "Price per ticket: $" << ticketHistory[i].price << endl;
-                cout << "Total price: $" << (ticketHistory[i].price * ticketHistory[i].quantity) << endl;
+                ticketHistory[i].displayTicketDetails();
             }
         }
         
