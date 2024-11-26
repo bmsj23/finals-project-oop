@@ -22,9 +22,9 @@ public:
         : name(nm), username(uname), email(mail), contactNumber(contact), password(pass), isAdmin(adminFlag) {}
 
     virtual void displayProfile() const {
-        cout << "Name: " << name << "\nUsername: " << username
-             << "\nEmail: " << email << "\nContact: " << contactNumber
-             << "\nRole: " << (isAdmin ? "Admin" : "Customer") << endl;
+        cout << "Name: " << name << endl << "Username: " << username
+             << endl << "Email: " << email << endl << "Contact: " << contactNumber
+             << endl << "Role: " << (isAdmin ? "Admin" : "Customer") << endl;
     }
 
     bool getIsAdmin() { return isAdmin; }
@@ -49,7 +49,7 @@ public:
         int choice;
         bool continueMenu = true;
         while (continueMenu) {
-            cout << "\nAdmin Menu:\n1 - View All Users\n2 - Logout\n3 - Exit\nEnter your choice: ";
+            cout << endl << "Admin Menu:\n1 - View All Users\n2 - Logout\n3 - Exit\nEnter your choice: ";
             cin >> choice;
 
             switch (choice) {
@@ -134,7 +134,7 @@ public:
         bool continueMenu = true;
 
         while (continueMenu) {
-            cout << "\nCustomer Menu:\n"
+            cout << endl << "Customer Menu:\n"
                  << "1 - View Profile\n"
                  << "2 - Purchase Tickets\n"
                  << "3 - View Movies\n"
@@ -180,9 +180,9 @@ public:
             {"Movie E", "Animated fantasy", "110 min", "10", "25", "Location B"}
         };
 
-        cout << "\nAvailable Movies:" << endl;
+        cout << endl << "Available Movies:" << endl;
         for (int i = 0; i < 5; i++) {
-            cout << "\n" << (i + 1) << ". Movie Name: " << movies[i][0] << endl;
+            cout << endl << "" << (i + 1) << ". Movie Name: " << movies[i][0] << endl;
             cout << "   Synopsis: " << movies[i][1] << endl;
             cout << "   Runtime: " << movies[i][2] << endl;
             cout << "   Price: P" << movies[i][3] << endl;
@@ -209,7 +209,7 @@ void purchaseTickets() {
         int movieChoice;
         bool validMovie = false;
         do {
-            cout << "\nEnter the number of the movie you want to watch (1-5): ";
+            cout << endl << "Enter the number of the movie you want to watch (1-5): ";
             if (!(cin >> movieChoice)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -226,7 +226,7 @@ void purchaseTickets() {
         movieChoice--; // array indexing adjustment (kasi 0 ang start ng index tapos sa choices, 1 ang start so babawasan ng isa para mag match)
 
         // show and select location with validation
-        cout << "\nAvailable Locations for " << movies[movieChoice][0] << ":" << endl;
+        cout << endl << "Available Locations for " << movies[movieChoice][0] << ":" << endl;
         cout << "1. Location A" << endl;
         cout << "2. Location B" << endl;
         cout << "3. Location C" << endl;
@@ -258,7 +258,7 @@ void purchaseTickets() {
         }
 
         // booking details
-        cout << "\nBooking Details:" << endl;
+        cout << endl << "Booking Details:" << endl;
         cout << "Movie: " << movies[movieChoice][0] << endl;
         cout << "Synopsis: " << movies[movieChoice][1] << endl;
         cout << "Runtime: " << movies[movieChoice][2] << endl;
@@ -267,7 +267,7 @@ void purchaseTickets() {
 
         char proceed;
         do {
-            cout << "\nDo you want to proceed with the booking? (Y/N): ";
+            cout << endl << "Do you want to proceed with the booking? (Y/N): ";
             cin >> proceed;
             proceed = toupper(proceed);
             if (proceed != 'Y' && proceed != 'N') {
@@ -302,7 +302,7 @@ void purchaseTickets() {
         int paymentMethod;
         bool validPayment = false;
         do {
-            cout << "\nSelect payment method:" << endl;
+            cout << endl << "Select payment method:" << endl;
             cout << "1. Card\n2. Bank\n3. E-Wallet" << endl;
             cout << "Enter choice (1-3): ";
 
@@ -333,7 +333,7 @@ void purchaseTickets() {
 
         // ask user to purchase more tickets (if y, uulitin ang func, if n, return to menu)
         do {
-            cout << "\nWould you like to purchase more tickets? (Y/N): ";
+            cout << endl << "Would you like to purchase more tickets? (Y/N): ";
             cin >> purchaseMore;
             purchaseMore = toupper(purchaseMore);
             if (purchaseMore != 'Y' && purchaseMore != 'N') {
@@ -345,13 +345,13 @@ void purchaseTickets() {
 }
 
     void viewTickets() {
-        cout << "\nMy Tickets:" << endl;
+        cout << endl << "My Tickets:" << endl;
         bool hasTickets = false;
         
         for (int i = 0; i < ticketCount; i++) {
             if (ticketHistory[i].getIsValid()) {
                 hasTickets = true;
-                cout << "\nTicket #" << (i + 1) << ":" << endl;
+                cout << endl << "Ticket #" << (i + 1) << ":" << endl;
                 ticketHistory[i].displayTicketDetails();
             }
         }
@@ -426,7 +426,7 @@ void mainMenu(CinemaSystem& system) {
     bool continueMenu = true;
 
     while (continueMenu) {
-        cout << "\nMain Menu:" << endl;
+        cout << endl << "Main Menu:" << endl;
         cout << "1 - Login\n2 - Sign Up\n3 - Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
