@@ -35,7 +35,7 @@ public:
 
     // Logout functionality
     void logout() const {
-        cout << "Logging out...\n";
+        cout << "Logging out..." << endl;
     }
 };
 
@@ -54,7 +54,7 @@ public:
 
             switch (choice) {
             case 1:
-                cout << "Displaying users...\n";
+                cout << "Displaying users..." << endl;
                 break;
             case 2:
                 logout();  // logout method
@@ -65,7 +65,7 @@ public:
                 exit(0);
                 break;
             default:
-                cout << "Invalid choice. Please try again.\n";
+                cout << "Invalid choice. Please try again." << endl;
             }
         }
     }
@@ -146,7 +146,7 @@ public:
 
             switch (choice) {
             case 1:
-                cout << "Viewing profile...\n";
+                cout << "Viewing profile..." << endl;
                 break;
             case 2:
                 purchaseTickets();
@@ -166,7 +166,7 @@ public:
                 exit(0);
                 break;
             default:
-                cout << "Invalid choice. Please try again.\n";
+                cout << "Invalid choice. Please try again." << endl;
             }
         }
     }
@@ -180,14 +180,14 @@ public:
             {"Movie E", "Animated fantasy", "110 min", "10", "25", "Location B"}
         };
 
-        cout << "\nAvailable Movies:\n";
+        cout << "\nAvailable Movies:" << endl;
         for (int i = 0; i < 5; i++) {
-            cout << "\n" << (i + 1) << ". Movie Name: " << movies[i][0] << "\n";
-            cout << "   Synopsis: " << movies[i][1] << "\n";
-            cout << "   Runtime: " << movies[i][2] << "\n";
-            cout << "   Price: P" << movies[i][3] << "\n";
-            cout << "   Available Seats: " << movies[i][4] << "\n";
-            cout << "   Location: " << movies[i][5] << "\n";
+            cout << "\n" << (i + 1) << ". Movie Name: " << movies[i][0] << endl;
+            cout << "   Synopsis: " << movies[i][1] << endl;
+            cout << "   Runtime: " << movies[i][2] << endl;
+            cout << "   Price: P" << movies[i][3] << endl;
+            cout << "   Available Seats: " << movies[i][4] << endl;
+            cout << "   Location: " << movies[i][5] << endl;
         }
     }
 
@@ -213,23 +213,23 @@ void purchaseTickets() {
             if (!(cin >> movieChoice)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Please enter a valid number.\n";
+                cout << "Please enter a valid number." << endl;
                 continue;
             }
             if (movieChoice >= 1 && movieChoice <= 5) {
                 validMovie = true;
             } else {
-                cout << "Invalid movie selection. Please try again.\n";
+                cout << "Invalid movie selection. Please try again." << endl;
             }
         } while (!validMovie);
         
         movieChoice--; // array indexing adjustment (kasi 0 ang start ng index tapos sa choices, 1 ang start so babawasan ng isa para mag match)
 
         // show and select location with validation
-        cout << "\nAvailable Locations for " << movies[movieChoice][0] << ":\n";
-        cout << "1. Location A\n";
-        cout << "2. Location B\n";
-        cout << "3. Location C\n";
+        cout << "\nAvailable Locations for " << movies[movieChoice][0] << ":" << endl;
+        cout << "1. Location A" << endl;
+        cout << "2. Location B" << endl;
+        cout << "3. Location C" << endl;
         
         int locationChoice;
         bool validLocation = false;
@@ -239,13 +239,13 @@ void purchaseTickets() {
             if (!(cin >> locationChoice)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Please enter a valid number.\n";
+                cout << "Please enter a valid number." << endl;
                 continue;
             }
             if (locationChoice >= 1 && locationChoice <= 3) {
                 validLocation = true;
             } else {
-                cout << "Invalid location selection. Please try again.\n";
+                cout << "Invalid location selection. Please try again." << endl;
             }
         } while (!validLocation);
 
@@ -258,7 +258,7 @@ void purchaseTickets() {
         }
 
         // booking details
-        cout << "\nBooking Details:\n";
+        cout << "\nBooking Details:" << endl;
         cout << "Movie: " << movies[movieChoice][0] << endl;
         cout << "Synopsis: " << movies[movieChoice][1] << endl;
         cout << "Runtime: " << movies[movieChoice][2] << endl;
@@ -271,12 +271,12 @@ void purchaseTickets() {
             cin >> proceed;
             proceed = toupper(proceed);
             if (proceed != 'Y' && proceed != 'N') {
-                cout << "Please enter Y or N.\n";
+                cout << "Please enter Y or N." << endl;
             }
         } while (proceed != 'Y' && proceed != 'N');
 
         if (proceed != 'Y') {
-            cout << "Booking cancelled.\n";
+            cout << "Booking cancelled." << endl;
             break;
         }
 
@@ -288,13 +288,13 @@ void purchaseTickets() {
             if (!(cin >> numTickets)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Please enter a valid number.\n";
+                cout << "Please enter a valid number." << endl;
                 continue;
             }
             if (numTickets >= 1 && numTickets <= 15) {
                 validTickets = true;
             } else {
-                cout << "Invalid number of tickets. Please enter a number between 1 and 15.\n";
+                cout << "Invalid number of tickets. Please enter a number between 1 and 15." << endl;
             }
         } while (!validTickets);
 
@@ -302,33 +302,33 @@ void purchaseTickets() {
         int paymentMethod;
         bool validPayment = false;
         do {
-            cout << "\nSelect payment method:\n";
-            cout << "1. Card\n2. Bank\n3. E-Wallet\n";
+            cout << "\nSelect payment method:" << endl;
+            cout << "1. Card\n2. Bank\n3. E-Wallet" << endl;
             cout << "Enter choice (1-3): ";
 
             if (!(cin >> paymentMethod)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Please enter a valid number.\n";
+                cout << "Please enter a valid number." << endl;
                 continue;
             }
             if (paymentMethod >= 1 && paymentMethod <= 3) {
                 validPayment = true;
             } else {
-                cout << "Invalid payment method. Please try again.\n";
+                cout << "Invalid payment method. Please try again." << endl;
             }
         } while (!validPayment);
 
-        cout << "Processing payment...\n";
-        cout << "Payment successful!\n";
+        cout << "Processing payment..." << endl;
+        cout << "Payment successful!" << endl;
 
         // store ticket in history
         if (ticketCount < 50) {
             ticketHistory[ticketCount] = Ticket(movies[movieChoice][0], selectedLocation, "Today", stod(movies[movieChoice][3]), numTickets);
             ticketCount++;
-            cout << "Tickets booked successfully!\n";
+            cout << "Tickets booked successfully!" << endl;
         }else {
-            cout << "Ticket history is full.\n";
+            cout << "Ticket history is full." << endl;
         }
 
         // ask user to purchase more tickets (if y, uulitin ang func, if n, return to menu)
@@ -337,7 +337,7 @@ void purchaseTickets() {
             cin >> purchaseMore;
             purchaseMore = toupper(purchaseMore);
             if (purchaseMore != 'Y' && purchaseMore != 'N') {
-                cout << "Please enter Y or N.\n";
+                cout << "Please enter Y or N." << endl;
             }
         } while (purchaseMore != 'Y' && purchaseMore != 'N');
 
@@ -345,19 +345,19 @@ void purchaseTickets() {
 }
 
     void viewTickets() {
-        cout << "\nMy Tickets:\n";
+        cout << "\nMy Tickets:" << endl;
         bool hasTickets = false;
         
         for (int i = 0; i < ticketCount; i++) {
             if (ticketHistory[i].getIsValid()) {
                 hasTickets = true;
-                cout << "\nTicket #" << (i + 1) << ":\n";
+                cout << "\nTicket #" << (i + 1) << ":" << endl;
                 ticketHistory[i].displayTicketDetails();
             }
         }
         
         if (!hasTickets) {
-            cout << "No tickets found in your history.\n";
+            cout << "No tickets found in your history." << endl;
         }
     }
 };
@@ -426,8 +426,8 @@ void mainMenu(CinemaSystem& system) {
     bool continueMenu = true;
 
     while (continueMenu) {
-        cout << "\nMain Menu:\n";
-        cout << "1 - Login\n2 - Sign Up\n3 - Exit\n";
+        cout << "\nMain Menu:" << endl;
+        cout << "1 - Login\n2 - Sign Up\n3 - Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -444,17 +444,17 @@ void mainMenu(CinemaSystem& system) {
 
                     user = system.authenticateUser(username, password);
                     if (user == nullptr) {
-                        cout << "Invalid credentials. Please try again.\n";
+                        cout << "Invalid credentials. Please try again." << endl;
                     }
                 }
 
-                cout << "Login successful.\n";
+                cout << "Login successful." << endl;
 
                 Customer* customer = dynamic_cast<Customer*>(user);
                 if (customer) {
                     customer->menu();  // if user == Customer, call Customer menu
                 } else {
-                    cout << "This user is not a customer.\n";
+                    cout << "This user is not a customer." << endl;
                 }
 
                 break;
@@ -491,7 +491,7 @@ void mainMenu(CinemaSystem& system) {
                         newUser = new Customer(name, username, email, contact, password);
                     }
                     system.addUser(newUser);
-                    cout << "Sign-up successful. You can now log in.\n";
+                    cout << "Sign-up successful. You can now log in." << endl;
                 } catch (ValidationException& ex) {
                     cout << "Error: " << ex.what() << endl;
                 }
@@ -499,11 +499,11 @@ void mainMenu(CinemaSystem& system) {
                 break;
             }
             case 3:
-                cout << "Exiting the system. Goodbye!\n";
+                cout << "Exiting the system. Goodbye!" << endl;
                 continueMenu = false;
                 break;
             default:
-                cout << "Invalid choice. Please try again.\n";
+                cout << "Invalid choice. Please try again." << endl;
         }
     }
 }
