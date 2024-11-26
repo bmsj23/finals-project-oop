@@ -173,11 +173,11 @@ public:
 
     void browseMovies() {
         string movies[5][6] = {
-            {"Movie A", "Action-packed thriller", "120 min", "10", "30", "Location A"},
-            {"Movie B", "Romantic comedy", "90 min", "12", "50", "Location B"},
-            {"Movie C", "Sci-fi adventure", "140 min", "15", "20", "Location A"},
-            {"Movie D", "Horror mystery", "100 min", "8", "10", "Location C"},
-            {"Movie E", "Animated fantasy", "110 min", "10", "25", "Location B"}
+            {"Movie A", "Action-packed thriller", "120 min", "250", "30", "Location A"},
+            {"Movie B", "Romantic comedy", "90 min", "12", "250", "Location B"},
+            {"Movie C", "Sci-fi adventure", "140 min", "15", "200", "Location A"},
+            {"Movie D", "Horror mystery", "100 min", "8", "300", "Location C"},
+            {"Movie E", "Animated fantasy", "110 min", "10", "225", "Location B"}
         };
 
         cout << endl << "Available Movies:" << endl;
@@ -193,11 +193,11 @@ public:
 
 void purchaseTickets() {
     string movies[5][6] = {
-        {"Movie A", "Action-packed thriller", "120 min", "10", "30", "Location A"},
-        {"Movie B", "Romantic comedy", "90 min", "12", "50", "Location B"},
-        {"Movie C", "Sci-fi adventure", "140 min", "15", "20", "Location A"},
-        {"Movie D", "Horror mystery", "100 min", "8", "10", "Location C"},
-        {"Movie E", "Animated fantasy", "110 min", "10", "25", "Location B"}
+        {"Movie A", "Action-packed thriller", "120 min", "250", "30", "Location A"},
+        {"Movie B", "Romantic comedy", "90 min", "12", "250", "Location B"},
+        {"Movie C", "Sci-fi adventure", "140 min", "15", "200", "Location A"},
+        {"Movie D", "Horror mystery", "100 min", "8", "300", "Location C"},
+        {"Movie E", "Animated fantasy", "110 min", "10", "225", "Location B"}
     };
 
     char purchaseMore;
