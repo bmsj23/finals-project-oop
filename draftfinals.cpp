@@ -134,13 +134,13 @@ public:
         bool continueMenu = true;
 
         while (continueMenu) {
-            cout << endl << "Customer Menu:\n"
-                 << "1 - View Profile\n"
-                 << "2 - Purchase Tickets\n"
-                 << "3 - View Movies\n"
-                 << "4 - My Tickets\n"
-                 << "5 - Logout\n"
-                 << "6 - Exit\n"
+            cout << endl << "Customer Menu:" << endl
+                 << "1 - View Profile" << endl
+                 << "2 - Purchase Tickets" << endl
+                 << "3 - View Movies" << endl
+                 << "4 - My Tickets" << endl
+                 << "5 - Logout" << endl
+                 << "6 - Exit" << endl
                  << "Enter your choice: ";
             cin >> choice;
 
