@@ -7,7 +7,7 @@ using namespace std;
 class Ticket;
 class Customer;
 
-    // Global seating arrays for different movies and locations
+    // seating array for different movies and locations
     char movieSeats[5][3][10][10];  // [movie][location][row][column]
 
     string movies[5][5] = {
@@ -18,7 +18,7 @@ class Customer;
         {"Movie E", "Animated fantasy", "110 min", "270", "Location B"}
     };
 
-    // Initialize seats to available ('O') for all movies and locations
+    // initialization of seats to available ('O') for all movies and locations
     void initializeAllSeats() {
         for (int movie = 0; movie < 5; ++movie) {
             for (int location = 0; location < 3; ++location) {
@@ -51,7 +51,7 @@ class Customer;
 
     // book seats func
     string* bookSeats(int movieIndex, int locationIndex, int numTickets) {
-        static string selectedSeats[15];  //max 15 tickets allowed
+        static string selectedSeats[15];  // max 15 tickets allowed
         
         for (int i = 0; i < numTickets; ++i) {
             string seatChoice;
@@ -78,7 +78,7 @@ class Customer;
                 if (movieSeats[movieIndex][locationIndex][row][col] == 'X') {
                     cout << "Seat already taken. Choose another seat." << endl;
                 } else {
-                    movieSeats[movieIndex][locationIndex][row][col] = 'X'; // Mark seat as taken
+                    movieSeats[movieIndex][locationIndex][row][col] = 'X'; // mark seat as taken
                     selectedSeats[i] = seatChoice;
                     cout << "Seat " << seatChoice << " successfully booked." << endl;
                     validSeat = true;
@@ -172,10 +172,10 @@ public:
         return nullptr;
     }
 
-    // Add a specific admin authentication method
+    // admin authentication method
     bool authenticateAdmin(const string& username, const string& password) {
         for (int i = 0; i < userCount; i++) {
-            // Check if the user is an admin and credentials match
+            // check if the user is an admin and credentials match
             if (users[i]->getUsername() == username && 
                 users[i]->getPassword() == password && 
                 users[i]->getIsAdmin()) {
@@ -187,9 +187,9 @@ public:
 
     void deleteUser(int index) {
         if (index >= 0 && index < userCount) {
-            delete users[index]; // Delete the user object
+            delete users[index]; // delete the user
             for (int i = index; i < userCount - 1; i++) {
-                users[i] = users[i + 1]; // Shift remaining users
+                users[i] = users[i + 1]; // yung logic for adjustment ng users sa array index
             }
             userCount--;
         } else {
@@ -341,7 +341,6 @@ public:
             return;
         }
 
-        // Adjust for 0-based indexing
         refundChoice--;
 
         if (!ticketHistory[refundChoice].getIsValid()) {
@@ -361,11 +360,8 @@ public:
         cin >> confirm;
 
         if (toupper(confirm) == 'Y') {
-            // Mark ticket as invalid
+            // void ticket para sa refund
             ticketHistory[refundChoice].setIsValid(false);
-            
-            // Release seats back to available
-            // Note: This would require additional logic to track specific seats
 
             cout << "Ticket refunded successfully." << endl;
             cout << "Refund amount: P" << refundAmount << endl;
@@ -513,9 +509,11 @@ public:
     void browseMovies() {
         cout << endl << "Available Movies:" << endl;
         for (int i = 0; i < 5; i++) {
-            // Calculate available seats for each movie and location
+            
+            // calculate available seats for each movie and location
             int availableSeats = 0;
-            for (int j = 0; j < 3; j++) {  // Iterate through locations
+            
+            for (int j = 0; j < 3; j++) {  // locations iteration
                 for (int row = 0; row < 10; ++row) {
                     for (int col = 0; col < 10; ++col) {
                         if (movieSeats[i][j][row][col] == 'O') {
@@ -536,7 +534,7 @@ public:
 
     int countAvailableSeats(int movieIndex, int locationIndex) {
         int availableSeats = 0;
-        for (int row = 0; row < 10; ++row) {
+        for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; ++col) {
                 if (movieSeats[movieIndex][locationIndex][row][col] == 'O') {
                     availableSeats++;
@@ -649,7 +647,7 @@ public:
                 }
             } while (!validTickets);
 
-            // Display and book seats
+            // display and book seats
             displaySeats(movieChoice, locationChoice - 1);
             string* bookedSeats = bookSeats(movieChoice, locationChoice - 1, numTickets);
 
@@ -660,13 +658,9 @@ public:
                 selectedSeats += bookedSeats[i];
             }
 
-            //bookSeats(movieChoice, locationChoice - 1, numTickets);
-
-            //string selectedSeats;
-
             for (int i = 0; i < numTickets; ++i) {
                 if (i > 0) selectedSeats += ", ";
-                char rowChar = 'A' + (movieChoice * 2);  // Adjust row based on movie
+                char rowChar = 'A' + (movieChoice * 2);  // adjust row based on movie
                 selectedSeats += rowChar + to_string(i + 1);
             }
 
@@ -691,7 +685,6 @@ public:
                 }
             } while (!validPayment);
 
-            // Detailed payment processing
             switch (paymentMethod) {
                 case 1: {  // Card Payment
                     string cardNumber, expDate, cvc;
@@ -733,7 +726,7 @@ public:
 
             cout << "Payment successful!" << endl;
 
-            // Modify ticket storage to include selected seats
+            // modify ticket storage to include selected seats
             if (ticketCount < 50) {
                 ticketHistory[ticketCount] = Ticket(
                     movies[movieChoice][0], 
@@ -800,7 +793,7 @@ public:
         bool continueUpdate = true;
 
         while (continueUpdate) {
-            // Display movie list
+            // display movie list
             for (int i = 0; i < 5; i++) {
                 cout << (i + 1) << ". " << movies[i][0] << endl;
             }
@@ -809,7 +802,7 @@ public:
             cin >> movieChoice;
 
             if (movieChoice == 0) break;
-            movieChoice--; // Adjust for 0-based indexing
+            movieChoice--;
 
             if (movieChoice < 0 || movieChoice >= 5) {
                 cout << "Invalid movie selection." << endl;
@@ -830,7 +823,7 @@ public:
             cin >> detailChoice;
 
             string newValue;
-            cin.ignore(); // Clear input buffer
+            cin.ignore();
 
             switch (detailChoice) {
                 case 1:
@@ -875,8 +868,8 @@ public:
     }
 
     void deleteMovie() {
-        // Check if there are any movies to delete
         bool hasMovies = false;
+
         for (int i = 0; i < 5; i++) {
             if (!movies[i][0].empty()) {
                 hasMovies = true;
@@ -889,7 +882,7 @@ public:
             return;
         }
 
-        // Display available movies
+        // display available movies
         cout << "\nAvailable Movies:" << endl;
         for (int i = 0; i < 5; i++) {
             if (!movies[i][0].empty()) {
@@ -927,12 +920,13 @@ public:
         cin >> confirm;
 
         if (toupper(confirm) == 'Y') {
-            // Clear the movie details
+
+            // clear movie details
             for (int j = 0; j < 5; j++) {
                 movies[movieChoice - 1][j] = "";
             }
 
-            // Clear the corresponding seats
+            // clear corresponding seats
             for (int location = 0; location < 3; ++location) {
                 for (int row = 0; row < 10; ++row) {
                     for (int col = 0; col < 10; ++col) {
@@ -948,7 +942,7 @@ public:
     }
 
 void refundManagement(CinemaSystem& system) {
-    User** users = system.getUsers();  // Use User** to match the type
+    User** users = system.getUsers();
     int userCount = system.getUserCount();
     int refundedSeats = 0;
 
@@ -1044,7 +1038,6 @@ void refundManagement(CinemaSystem& system) {
                 refundManagement(system);
                 break;
             case 5:
-                // User deletion
                 deleteUser(system);
                 break;
             case 6:
@@ -1095,7 +1088,7 @@ void mainMenu(CinemaSystem& system) {
                     cout << "Enter password: ";
                     cin >> password;
 
-                            // First, check if it's an admin login
+                    // check if it's an admin login
                     bool isAdmin = system.authenticateAdmin(username, password);
                     if (isAdmin) {
 
@@ -1122,7 +1115,7 @@ void mainMenu(CinemaSystem& system) {
                         }
                     }
 
-                    // If not an admin, check for regular user login
+                    // if hindi admin, check for customer login
                     user = system.authenticateUser(username, password);
 
                     if (user != nullptr) {
