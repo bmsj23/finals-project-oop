@@ -7,86 +7,87 @@ using namespace std;
 class Ticket;
 class Customer;
 
-    // seating array for different movies and locations
-    char movieSeats[5][3][10][10];  // [movie][location][row][column]
+// seating array for different movies and locations
+char movieSeats[5][3][10][10];  // [movie][location][row][column]
 
-    string movies[5][5] = {
-        {"Movie A", "Action-packed thriller", "120 min", "300", "Location A"},
-        {"Movie B", "Romantic comedy", "90 min", "250", "Location B"},
-        {"Movie C", "Sci-fi adventure", "140 min", "200", "Location A"},
-        {"Movie D", "Horror mystery", "100 min", "350", "Location C"},
-        {"Movie E", "Animated fantasy", "110 min", "270", "Location B"}
-    };
+string movies[5][5] = {
+    {"Movie A", "Action-packed thriller", "120 min", "300", "Location A"},
+    {"Movie B", "Romantic comedy", "90 min", "250", "Location B"},
+    {"Movie C", "Sci-fi adventure", "140 min", "200", "Location A"},
+    {"Movie D", "Horror mystery", "100 min", "350", "Location C"},
+    {"Movie E", "Animated fantasy", "110 min", "270", "Location B"}
+};
 
-    // initialization of seats to available ('O') for all movies and locations
-    void initializeAllSeats() {
-        for (int movie = 0; movie < 5; ++movie) {
-            for (int location = 0; location < 3; ++location) {
-                for (int row = 0; row < 10; ++row) {
-                    for (int col = 0; col < 10; ++col) {
-                        movieSeats[movie][location][row][col] = 'O';
-                    }
+// initialization of seats to available ('O') for all movies and locations
+void initializeAllSeats() {
+    for (int movie = 0; movie < 5; ++movie) {
+        for (int location = 0; location < 3; ++location) {
+            for (int row = 0; row < 10; ++row) {
+                for (int col = 0; col < 10; ++col) {
+                    movieSeats[movie][location][row][col] = 'O';
                 }
             }
         }
     }
+}
 
-    // display available seats for a specific movie and location
-    void displaySeats(int movieIndex, int locationIndex) {
-        cout << "\nSeating Arrangement (O = Available, X = Taken):\n\n";
-        cout << "  ";
-        for (int col = 1; col <= 10; ++col) {
-            cout << setw(2) << col << " ";
+// display available seats for a specific movie and location
+void displaySeats(int movieIndex, int locationIndex) {
+    cout << "\nSeating Arrangement (O = Available, X = Taken):\n\n";
+    cout << "  ";
+    for (int col = 1; col <= 10; ++col) {
+        cout << setw(2) << col << " ";
+    }
+    cout << endl;
+
+    for (int row = 0; row < 10; ++row) {
+        cout << char('A' + row) << " ";
+        for (int col = 0; col < 10; ++col) {
+            cout << setw(2) << movieSeats[movieIndex][locationIndex][row][col] << " ";
         }
         cout << endl;
-
-        for (int row = 0; row < 10; ++row) {
-            cout << char('A' + row) << " ";
-            for (int col = 0; col < 10; ++col) {
-                cout << setw(2) << movieSeats[movieIndex][locationIndex][row][col] << " ";
-            }
-            cout << endl;
-        }
     }
+}
 
-    // book seats func
-    string* bookSeats(int movieIndex, int locationIndex, int numTickets) {
-        static string selectedSeats[15];  // max 15 tickets allowed
-        
-        for (int i = 0; i < numTickets; ++i) {
-            string seatChoice;
-            bool validSeat = false;
+// book seats func
+string* bookSeats(int movieIndex, int locationIndex, int numTickets) {
+    static string selectedSeats[15];  // max 15 tickets allowed
+    
+    for (int i = 0; i < numTickets; ++i) {
+        string seatChoice;
+        bool validSeat = false;
 
-            while (!validSeat) {
-                cout << "Enter seat " << (i + 1) << " (e.g., A1, B10): ";
-                cin >> seatChoice;
+        while (!validSeat) {
+            cout << "Enter seat " << (i + 1) << " (e.g., A1, B10): ";
+            cin >> seatChoice;
 
-                if (seatChoice.length() < 2 || seatChoice.length() > 3) {
-                    cout << "Invalid format. Try again." << endl;
-                    continue;
-                }
+            if (seatChoice.length() < 2 || seatChoice.length() > 3) {
+                cout << "Invalid format. Try again." << endl;
+                continue;
+            }
 
-                char rowChar = toupper(seatChoice[0]);
-                int col = stoi(seatChoice.substr(1)) - 1;
+            char rowChar = toupper(seatChoice[0]);
+            int col = stoi(seatChoice.substr(1)) - 1;
 
-                if (rowChar < 'A' || rowChar > 'J' || col < 0 || col > 9) {
-                    cout << "Seat out of range. Try again." << endl;
-                    continue;
-                }
+            if (rowChar < 'A' || rowChar > 'J' || col < 0 || col > 9) {
+                cout << "Seat out of range. Try again." << endl;
+            continue;
+            }
 
-                int row = rowChar - 'A';
-                if (movieSeats[movieIndex][locationIndex][row][col] == 'X') {
-                    cout << "Seat already taken. Choose another seat." << endl;
-                } else {
-                    movieSeats[movieIndex][locationIndex][row][col] = 'X'; // mark seat as taken
-                    selectedSeats[i] = seatChoice;
-                    cout << "Seat " << seatChoice << " successfully booked." << endl;
-                    validSeat = true;
-                }
+            int row = rowChar - 'A';
+            
+            if (movieSeats[movieIndex][locationIndex][row][col] == 'X') {
+                cout << "Seat already taken. Choose another seat." << endl;
+            } else {
+                movieSeats[movieIndex][locationIndex][row][col] = 'X'; // mark seat as taken
+                selectedSeats[i] = seatChoice;
+                cout << "Seat " << seatChoice << " successfully booked." << endl;
+                validSeat = true;
             }
         }
-        return selectedSeats;
     }
+    return selectedSeats;
+}
 
 // Exception Class for Validation
 class ValidationException {
@@ -382,8 +383,9 @@ public:
                  << "4 - My Tickets" << endl
                  << "5 - Refund Tickets" << endl                
                  << "6 - Logout" << endl                  
-                 << "7 - Exit" << endl
+                 << "7 - Exit" << endl << endl
                  << "Enter your choice: ";
+            
             cin >> choice;
 
             switch (choice) {
@@ -762,7 +764,7 @@ public:
         for (int i = 0; i < ticketCount; i++) {
             if (ticketHistory[i].getIsValid()) {
                 hasTickets = true;
-                cout << endl << "Ticket #" << (i + 1) << ":" << endl;
+                cout << endl << "Order #" << (i + 1) << ":" << endl;
                 ticketHistory[i].displayTicketDetails();
             }
         }
@@ -965,9 +967,9 @@ void refundManagement(CinemaSystem& system) {
         return;
     }
 
-    cout << endl << "Refundable Tickets:" << endl << endl;
+    cout << endl << "Refundable Tickets:" << endl;
     for (int i = 0; i < refundableCount; ++i) {
-        cout << endl << "Ticket #" << i + 1 << ". ";
+        cout << endl << "Ticket #" << i + 1 << ". " << endl;
         refundableTickets[i]->displayTicketDetails();
     }
 
@@ -1020,7 +1022,7 @@ void refundManagement(CinemaSystem& system) {
                  << "4 - Accommodate Refunds and Cancellations" << endl
                  << "5 - Delete Users" << endl
                  << "6 - Logout" << endl
-                 << "7 - Exit" << endl
+                 << "7 - Exit" << endl << endl
                  << "Enter your choice: ";
             cin >> choice;
 
