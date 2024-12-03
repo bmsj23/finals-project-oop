@@ -473,6 +473,15 @@ class Ticket {
             cout << "Price per ticket: P" << price << endl;
             cout << "Total price: P" << getTotalPrice() << endl;
         }
+        void displayTicketDetailsOnCart() const {
+            cout << "Movie: " << movieName << endl;
+            cout << "Location: " << location << endl;
+            cout << "Show Time: " << showTime << endl;
+            cout << "Date: " << selectedDate << endl;
+            cout << "Quantity: " << quantity << endl;
+            cout << "Price per ticket: P" << price << endl;
+            cout << "Total price: P" << getTotalPrice() << endl;
+        }
 };
 
     class Cart {
@@ -514,7 +523,7 @@ public:
         double totalCartPrice = 0.0;
         for (int i = 0; i < itemCount; i++) {
             cout << "\nItem #" << (i + 1) << ":" << endl;
-            cartItems[i].displayTicketDetails();
+            cartItems[i].displayTicketDetailsOnCart();
             totalCartPrice += cartItems[i].getTotalPrice();
         }
         cout << "\nTotal Cart Value: P" << totalCartPrice << endl;
