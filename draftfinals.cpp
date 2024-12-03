@@ -9,24 +9,26 @@
     class Customer;
 
     // seating array for different movies and locations
-    char movieSeats[5][3][5][4][10][10];  // [movies][locations][dates][showtimes][rows][columns]
+    char movieSeats[10][3][5][4][10][10];  // [movies][locations][dates][showtimes][rows][columns]
 
-    string movies[5][5] = {
-        {"Movie A", "Action-packed thriller", "120 min", "300", "Location A"},
-        {"Movie B", "Romantic comedy", "90 min", "250", "Location B"},
-        {"Movie C", "Sci-fi adventure", "140 min", "200", "Location A"},
-        {"Movie D", "Horror mystery", "100 min", "350", "Location C"},
-        {"Movie E", "Animated fantasy", "110 min", "270", "Location B"}
+    int movieCount = 5; // initial value
+
+    string movies[10][5] = {
+        {"Wicked", "Fantasy", "120 min", "300", "SM Lipa, Robinsons Lipa, Evia"},
+        {"Mufasa", "Adventure", "118 min", "250", "SM Lipa, Robinsons Lipa, Evia"},
+        {"Hello, Love, Again", "Romance", "130 min", "200", "SM Lipa, Robinsons Lipa, Evia"},
+        {"Heretic", "Horror ", "100 min", "350", "SM Lipa, Robinsons Lipa, Evia"},
+        {"Moana 2", "Adventure", "110 min", "270", "SM Lipa, Robinsons Lipa, Evia"}
     };
 
     // array for dates (e.g., Today + 4 future dates)
     string availableDates[5] = {"Today", "December 5", "December 6", "December 7", "December 8"};
     // times are based on the movie runtime; start time is 11 AM
-    string times[4] = {"11 AM", "1 PM", "3 PM", "5 PM"};
+    string times[4] = {"10 AM", "1 PM", "4 PM", "7 PM"};
 
     // initialization of seats to available ('O') for all movies and locations
     void initializeAllSeats() {
-        for (int movie = 0; movie < 5; movie++) {
+        for (int movie = 0; movie < movieCount; movie++) {
             for (int location = 0; location < 3; location++) {
                 for (int date = 0; date < 5; date++) {
                     for (int time = 0; time < 4; time++) {
@@ -39,6 +41,117 @@
                 }
             }
         }
+    }
+
+    void inputValidName() {
+        string name;
+        bool isValid = true;
+        
+        do {
+            cout << "Enter name: ";
+            cin.ignore();
+            getline(cin, name);
+
+            isValid = true;
+            if (name.empty()) {                         //if ang input ay single int (ex. 2) dito napasok
+                cout << "Input should not be empty.\n";
+                isValid = false;
+            }
+            else {                                      //if series of number dito
+                for (char c : name) {
+                    if (isdigit(c) && c != ' ') {
+                        cout << "Invalid input. Name should only contain letters.\n";
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+        } while (!isValid);
+    }
+
+    void inputValidEmail() {
+        string email;
+        bool isValid = false;
+
+        do {
+            cout << "Enter email: ";
+            cin >> email;
+
+            // Check if '@' exists exactly once and there is at least one '.' after '@'
+            size_t atPos = email.find('@');
+            size_t dotPos = email.find('.', atPos);
+
+            isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
+
+            if (!isValid) {
+                cout << "Invalid input. Email should contain '@' and '.'.\n";
+            }
+        } while (!isValid);
+    }
+
+    void inputValidContactNum() {
+        string contactNum;
+        bool isValid = true;
+
+        do {
+            cout << "Enter contact number: ";
+            cin >> contactNum;
+
+            isValid = true;
+            if (contactNum.empty()) {
+                cout << "Contact Number should not be empty.\n";
+                isValid = false;
+            }
+            else if (contactNum.length() != 11) {
+                cout << "Invalid input. Contact number should contain 11 numbers only.\n";
+                isValid = false;
+            }
+            else {
+                for (char c : contactNum) {
+                    if (!isdigit(c)) {
+                        isValid = false;
+                        cout << "Invalid input. Contact number should only contain numbers and without spaces.";
+                    }
+                }
+            }
+        } while (!isValid);
+    }
+
+void inputValidPassword() {
+        string password;
+        bool hasLetter = false;
+        bool hasDigit = false;
+
+        do {
+            cout << "Enter password: ";
+            cin.ignore();
+            getline(cin, password);
+
+            if (password.empty()) {
+                cout << "Password should not be empty.\n";
+            }
+            else if (password.length() < 8) {
+                cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
+                hasLetter = false;
+                hasDigit = false;
+            }
+            else {
+                for (char c : password) {
+                    if (isalnum(c)) {
+                        if (isalpha(c)) {
+                            hasLetter = true;
+                        }
+                        if (isdigit(c)) {
+                            hasDigit = true;
+                        }
+                    }
+                }
+            }
+
+            if (!hasLetter || !hasDigit) {
+                cout << "Invalid input. Password should contain both number and password.\n";
+            }
+        } while (!hasLetter || !hasDigit);
     }
 
     // display available seats for a specific movie and location
@@ -209,6 +322,7 @@
 
         void displayUsers() const {
             for (int i = 0; i < userCount; i++) {
+                cout << "User #" << i + 1 << endl;
                 users[i]->displayProfile();
                 cout << endl;
             }
@@ -234,77 +348,6 @@
 
     // definition of the static instance outside the class (for Singleton)
     CinemaSystem CinemaSystem::instance;
-
-    void inputValidName() {
-        string name;
-        bool isValid = true;
-        
-        do {
-            cout << "Enter name: ";
-            cin.ignore();
-            getline(cin, name);
-
-            if (name.empty()) {
-                cout << "Input should not be empty.\n";
-                isValid = false;
-            }
-            else {
-                for (char c : name) {
-                    if (!isalpha(c) && c != ' ') {
-                        isValid = false;
-                        cout << "Invalid input. Name should only contain letters.\n";
-                    }
-                }
-            }
-        } while (!isValid);
-    }
-
-    void inputValidEmail() {
-        string email;
-        bool isValid = false;
-
-        do {
-            cout << "Enter email: ";
-            cin >> email;
-
-            // check if '@' exists exactly once and there is at least one '.' after '@'
-            size_t atPos = email.find('@');
-            size_t dotPos = email.find('.', atPos);
-
-            isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
-
-            if (!isValid) {
-                cout << "Invalid input. Email should contain '@' and '.'.\n";
-            }
-        } while (!isValid);
-    }
-
-    void inputValidContactNum() {
-        string contactNum;
-        bool isValid = true;
-
-        do {
-            cout << "Enter contact number: ";
-            cin >> contactNum;
-
-            if (contactNum.empty()) {
-                cout << "Contact Number should not be empty.\n";
-                isValid = false;
-            }
-            else if (contactNum.length() != 11) {
-                cout << "Invalid input. Contact number should contain 11 numbers only.\n";
-                isValid = false;
-            }
-            else {
-                for (char c : contactNum) {
-                    if (!isdigit(c)) {
-                        isValid = false;
-                        cout << "Invalid input. Contact number should only contain numbers and without spaces.";
-                    }
-                }
-            }
-        } while (!isValid);
-    }
 
     void loginValidationUsername(CinemaSystem& system) {
         string username;
@@ -352,36 +395,6 @@
                 }
             }
         } while (username.empty() || username.length() < 5 || isFound);
-    }
-
-    void inputValidPassword() {
-        string password;
-        bool hasLetter = false;
-        bool hasDigit = false;
-
-        do {
-            cout << "Enter password: ";
-            getline(cin, password);
-
-            if (password.empty()) {
-                cout << "Password should not be empty.\n";
-            }
-            else if (password.length() < 8) {
-                cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
-            }
-            else {
-                for (char c : password) {
-                    if (isalnum(c)) {
-                        if (isalpha(c)) hasLetter = true;
-                        if (isdigit(c)) hasDigit = true;
-                    }
-            
-                    if (!hasLetter || !hasDigit) {
-                        cout << "Invalid input. Password should contain both number and password.\n";
-                    }
-                }
-            }
-        } while (password.empty() || password.length() < 8 || !hasLetter || !hasDigit);
     }
 
 class Ticket {
@@ -515,7 +528,7 @@ public:
 
     void viewCart() {
         if (itemCount == 0) {
-            cout << "Your cart is empty." << endl;
+            cout << endl << "Your cart is empty." << endl;
             return;
         }
 
@@ -710,7 +723,7 @@ for (int i = 0; i < numSeats; i++) {
             char choice;
             
             do {
-                cout << "Enter search keyword (movie title or synopsis): ";
+                cout << "Enter search keyword (movie title or genre): ";
                 cin.ignore();
                 getline(cin, keyword);
                 
@@ -751,7 +764,7 @@ for (int i = 0; i < numSeats; i++) {
 
                 // display sorted movies
                 cout << endl << "Movies sorted successfully:" << endl;
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < movieCount; i++) {
                     cout << "Title: " << movies[i][0] 
                         << ", Genre: " << movies[i][1] 
                         << ", Price: P" << movies[i][3] << endl;
@@ -854,7 +867,7 @@ for (int i = 0; i < numSeats; i++) {
 
         void browseMovies() {
             cout << endl << "Available Movies:" << endl;
-            for (int movie = 0; movie < 5; movie++) {
+            for (int movie = 0; movie < movieCount; movie++) {
                 int availableSeats = 0;
                 
                 // array to store available locations
@@ -879,15 +892,15 @@ for (int i = 0; i < numSeats; i++) {
                     
                     // if location has available seats, add it to the array
                     if (locationSeats > 0) {
-                        string locationName = (locationIndex == 0 ? "Location A" :
-                                            locationIndex == 1 ? "Location B" : "Location C");
+                        string locationName = (locationIndex == 0 ? "SM Lipa" :
+                                            locationIndex == 1 ? "Robinsons Lipa" : "Evia");
                         availableLocations[availableLocationsCount++] = locationName;
                     }
                 }
 
                 // display movie details
                 cout << endl << (movie + 1) << ". Movie Name: " << movies[movie][0] << endl;
-                cout << "   Synopsis: " << movies[movie][1] << endl;
+                cout << "   Genre: " << movies[movie][1] << endl;
                 cout << "   Runtime: " << movies[movie][2] << endl;
                 cout << "   Price: P" << movies[movie][3] << endl;
                 cout << "   Available Seats: " << availableSeats << endl;
@@ -902,7 +915,6 @@ for (int i = 0; i < numSeats; i++) {
                 }
                 cout << endl;
                 
-                cout << "   Primary Location: " << movies[movie][4] << endl;
             }
         }
 
@@ -929,7 +941,7 @@ for (int i = 0; i < numSeats; i++) {
             cout << "Search results for \"" << keyword << "\":" << endl;
             bool found = false;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < movieCount; i++) {
                 if (searchKeyword(movies[i][0], keyword) || searchKeyword(movies[i][1], keyword)) {
                     cout << "Title: " << movies[i][0] << ", Genre: " << movies[i][1] 
                         << ", Duration: " << movies[i][2] << ", Price: " << movies[i][3]
@@ -949,7 +961,7 @@ for (int i = 0; i < numSeats; i++) {
                 for (int j = 0; j < size - i - 1; j++) {
                     if (movies[j][column] > movies[j + 1][column]) {
                         // swap entire rows
-                        for (int k = 0; k < 5; k++) {
+                        for (int k = 0; k < movieCount; k++) {
                             string temp = movies[j][k];
                             movies[j][k] = movies[j + 1][k];
                             movies[j + 1][k] = temp;
@@ -1175,14 +1187,14 @@ void checkoutCart() {
                 int movieChoice;
                 bool validMovie = false;
                 do {
-                    cout << endl << "Enter the number of the movie you want to watch (1-5): ";
+                    cout << endl << "Enter the number of the movie you want to watch (1-" << movieCount << "): ";
                     if (!(cin >> movieChoice)) {
                         cin.clear();
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Please enter a valid number." << endl;
                         continue;
                     }
-                    if (movieChoice >= 1 && movieChoice <= 5) {
+                    if (movieChoice >= 1 && movieChoice <= movieCount) {
                         validMovie = true;
                     } else {
                         cout << "Invalid movie selection. Please try again." << endl;
@@ -1193,9 +1205,7 @@ void checkoutCart() {
 
                 // show and select location with validation
                 cout << endl << "Available Locations for " << movies[movieChoice][0] << ":" << endl;
-                cout << "1. Location A" << endl;
-                cout << "2. Location B" << endl;
-                cout << "3. Location C" << endl;
+                cout << movies[movieChoice][4] << endl;
                 
                 int locationChoice;
                 bool validLocation = false;
@@ -1218,9 +1228,9 @@ void checkoutCart() {
                 string selectedLocation;
 
                 switch (locationChoice) {
-                    case 1: selectedLocation = "Location A"; break;
-                    case 2: selectedLocation = "Location B"; break;
-                    case 3: selectedLocation = "Location C"; break;
+                    case 1: selectedLocation = "SM Lipa"; break;
+                    case 2: selectedLocation = "Robinsons Lipa"; break;
+                    case 3: selectedLocation = "Evia"; break;
                 }
 
                 int dateChoice;
@@ -1277,7 +1287,7 @@ void checkoutCart() {
 
                 cout << endl << "Booking Details" << endl << endl;
                 cout << "Movie: " << movies[movieChoice][0] << endl;
-                cout << "Synopsis: " << movies[movieChoice][1] << endl;
+                cout << "Genre: " << movies[movieChoice][1] << endl;
                 cout << "Runtime: " << movies[movieChoice][2] << endl;
                 cout << "Location: " << selectedLocation << endl;
                 cout << "Date: " << selectedDate << endl;  // display selected date
@@ -1496,16 +1506,78 @@ void checkoutCart() {
             system.displayUsers();
         }
 
+void addMovie(string movies[10][5], int& movieCount, char movieSeats[10][3][5][4][10][10]) {
+    char choice;
+    do {
+        if (movieCount >= 10) {
+            cout << "The movie list is full. Cannot add more movies." << endl;
+            break;
+        }
+
+        cout << "Adding a new movie" << endl << endl;
+
+        cout << "Enter Title: ";
+        cin.ignore();
+        getline(cin, movies[movieCount][0]);
+
+        cout << "Enter Genre: ";
+        getline(cin, movies[movieCount][1]);
+
+        cout << "Enter Duration (in minutes, e.g., 120): ";
+        string duration;
+        getline(cin, duration);
+        movies[movieCount][2] = duration + " min";
+
+        cout << "Enter Price (P): ";
+        string price;
+        getline(cin, price);
+        movies[movieCount][3] = price;
+
+        movies[movieCount][4] = "SM Lipa, Robinsons Lipa, Evia";
+
+        // Initialize seats for this movie
+        for (int loc = 0; loc < 3; loc++) { // Locations
+            for (int row = 0; row < 10; row++) { // Rows
+                for (int col = 0; col < 10; col++) { // Columns
+                    for (int date = 0; date < 5; date++) { // Dates
+                        for (int time = 0; time < 4; time++) { // Times
+                            movieSeats[movieCount][loc][date][time][row][col] = 'O';
+                        }
+                    }
+                }
+            }
+        }
+
+        movieCount++;
+
+        cout << "Do you want to add another movie? (Y/N): ";
+        cin >> choice;
+        cin.ignore();
+    } while (choice == 'Y' || choice == 'y');
+
+    // Print the final movie list
+    cout << "\nFinal movie list:" << endl;
+    for (int i = 0; i < movieCount; i++) {
+        cout << "Movie Name: " << movies[i][0] << endl;
+        cout << "Genre: " << movies[i][1] << endl;
+        cout << "Runtime: " << movies[i][2] << endl;
+        cout << "Price: " << movies[i][3] << endl;
+        cout << "Available Locations: " << movies[i][4] << endl;
+        cout << endl;
+    }
+}
+
+
             void updateMovieDetails() {
             int movieChoice, detailChoice;
             bool continueUpdate = true;
 
             while (continueUpdate) {
                 // display movie list
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < movieCount; i++) {
                     cout << endl << "Movie " << (i + 1) << "." << endl;
                     cout << endl << "Movie Name: " << movies[i][0] << endl;
-                    cout << "   Synopsis: " << movies[i][1] << endl;
+                    cout << "   Genre: " << movies[i][1] << endl;
                     cout << "   Runtime: " << movies[i][2] << endl;
                     cout << "   Price: P" << movies[i][3] << endl;
                 }
@@ -1544,7 +1616,7 @@ void checkoutCart() {
                         movies[movieChoice][0] = newValue;
                         break;
                     case 2:
-                        cout << "Enter new synopsis: ";
+                        cout << "Enter new genre: ";
                         getline(cin, newValue);
                         movies[movieChoice][1] = newValue;
                         break;
@@ -1582,7 +1654,7 @@ void checkoutCart() {
         void deleteMovie() {
             bool hasMovies = false;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < movieCount; i++) {
                 if (!movies[i][0].empty()) {
                     hasMovies = true;
                     break;
@@ -1596,7 +1668,7 @@ void checkoutCart() {
 
             // display available movies
             cout << "\nAvailable Movies:" << endl;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < movieCount; i++) {
                 if (!movies[i][0].empty()) {
                     cout << (i + 1) << ". " << movies[i][0] << endl;
                 }
@@ -1633,7 +1705,7 @@ void checkoutCart() {
             if (toupper(confirm) == 'Y') {
 
                 // clear movie details
-                for (int j = 0; j < 5; j++) {
+                for (int j = 0; j < movieCount; j++) {
                     movies[movieChoice - 1][j] = "";
                 }
 
@@ -1714,7 +1786,7 @@ void refundManagement(CinemaSystem& system) {
 
     // find movie index
     int movieIndex = -1;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < movieCount; i++) {
         if (movies[i][0] == movieName) {
             movieIndex = i;
             break;
@@ -1792,6 +1864,10 @@ void refundManagement(CinemaSystem& system) {
             system.displayUsers();
             int choice;
 
+            for (int i = 0; i < system.getUserCount(); i++){
+              //  cout <<
+            }
+
             cout << "Enter the user number to delete (0 to cancel): ";
             cin >> choice;
 
@@ -1812,12 +1888,13 @@ void refundManagement(CinemaSystem& system) {
             while (continueMenu) {
                 cout << endl << "Admin Menu:" << endl
                     << "1 - View All Users" << endl
-                    << "2 - View and Update Movie Details" << endl
-                    << "3 - Delete Movies" << endl
-                    << "4 - Accommodate Refunds and Cancellations" << endl
-                    << "5 - Delete Users" << endl
-                    << "6 - Logout" << endl
-                    << "7 - Exit" << endl << endl
+                    << "2 - Add a Movie" << endl
+                    << "3 - View and Update Movie Details" << endl
+                    << "4 - Delete Movies" << endl
+                    << "5 - Accommodate Refunds and Cancellations" << endl
+                    << "6 - Delete Users" << endl
+                    << "7 - Logout" << endl
+                    << "8 - Exit" << endl << endl
                     << "Enter your choice: ";
                 cin >> choice;
 
@@ -1826,22 +1903,25 @@ void refundManagement(CinemaSystem& system) {
                     viewAllUsers(system);
                     break;
                 case 2:
-                    updateMovieDetails();
+                    addMovie(movies, movieCount, movieSeats);
                     break;
                 case 3:
-                    deleteMovie();
+                    updateMovieDetails();
                     break;
                 case 4:
-                    refundManagement(system);
+                    deleteMovie();
                     break;
                 case 5:
-                    deleteUser(system);
+                    refundManagement(system);
                     break;
                 case 6:
+                    deleteUser(system);
+                    break;
+                case 7:
                     logout();
                     continueMenu = false;
                     break;
-                case 7:
+                case 8:
                     cout << endl << "Exiting the system." << endl;
                     exit(0);
                     break;
@@ -1934,6 +2014,16 @@ void refundManagement(CinemaSystem& system) {
                     string name, username, email, contact, password;
                     bool isAdmin = false;
 
+/*
+                    cout << endl << "Sign Up" << endl << endl;
+                    cout << "Enter username: ";
+                    cin >> username;
+                    inputValidPassword();
+                    inputValidName();
+                    inputValidEmail();
+                    inputValidContactNum();
+*/
+
                     cout << endl << "Sign Up" << endl << endl;
                     cout << "Enter username: ";
                     cin >> username;
@@ -1967,7 +2057,6 @@ void refundManagement(CinemaSystem& system) {
                     } catch (ValidationException& ex) {
                         cout << "Error: " << ex.what() << endl;
                     }
-
                     break;
                 }
                 case 3:
