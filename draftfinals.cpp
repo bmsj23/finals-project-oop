@@ -2322,7 +2322,7 @@ public:
 
 // main Menu Function
 void mainMenu(CinemaSystem &CinemaSystem) {
-    string adminUsernames[5] = {"admin1", "admin2", "admin3", "admin4", "admin5"};
+    string adminUsernames[5] = {"adminA", "adminB", "adminC", "adminD", "adminE"};
     int choice;
     bool continueMenu = true;
 
