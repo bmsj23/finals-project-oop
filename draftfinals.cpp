@@ -1,5 +1,6 @@
     #include <iostream>
     #include <string>
+    #include <sstream>
     #include <limits>
     #include <iomanip>
     using namespace std;
@@ -18,9 +19,9 @@
         {"Movie E", "Animated fantasy", "110 min", "270", "Location B"}
     };
 
-    // Array for dates (e.g., Today + 4 future dates)
+    // array for dates (e.g., Today + 4 future dates)
     string availableDates[5] = {"Today", "December 5", "December 6", "December 7", "December 8"};
-    // Times are based on the movie runtime; start time is 11 AM
+    // times are based on the movie runtime; start time is 11 AM
     string times[4] = {"11 AM", "1 PM", "3 PM", "5 PM"};
 
     // initialization of seats to available ('O') for all movies and locations
@@ -58,9 +59,8 @@
         }
     }
 
-    // book seats func
     string* bookSeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex, int numTickets) {
-        static string selectedSeats[15]; // max 15 tickets allowed
+        static string selectedSeats[15];
 
         for (int i = 0; i < numTickets; i++) {
             string seatChoice;
@@ -70,7 +70,6 @@
                 cout << "Enter seat " << (i + 1) << " (e.g., A1, B10): ";
                 cin >> seatChoice;
 
-                // Validate seat format
                 if (seatChoice.length() < 2 || seatChoice.length() > 3) {
                     cout << "Invalid format. Try again." << endl;
                     continue;
@@ -79,7 +78,6 @@
                 char rowChar = toupper(seatChoice[0]);
                 int col = stoi(seatChoice.substr(1)) - 1;
 
-                // Validate seat range
                 if (rowChar < 'A' || rowChar > 'J' || col < 0 || col > 9) {
                     cout << "Seat out of range. Try again." << endl;
                     continue;
@@ -87,11 +85,10 @@
 
                 int row = rowChar - 'A';
 
-                // Check if seat is available
                 if (movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] == 'X') {
                     cout << "Seat already taken. Choose another seat." << endl;
                 } else {
-                    movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'X'; // Mark seat as taken
+                    movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'X';
                     selectedSeats[i] = seatChoice;
                     cout << "Seat " << seatChoice << " successfully booked." << endl;
                     validSeat = true;
@@ -101,158 +98,7 @@
         return selectedSeats;
     }
 
-
-
-void inputValidName() {
-        string name;
-        bool isValid = true;
-        
-        do {
-            cout << "Enter name: ";
-            cin.ignore();
-            getline(cin, name);
-
-            if (name.empty()) {
-                cout << "Input should not be empty.\n";
-                isValid = false;
-            }
-            else {
-                for (char c : name) {
-                    if (!isalpha(c) && c != ' ') {
-                        isValid = false;
-                        cout << "Invalid input. Name should only contain letters.\n";
-                    }
-                }
-            }
-        } while (!isValid);
-    }
-
-    void inputValidEmail() {
-        string email;
-        bool isValid = false;
-
-        do {
-            cout << "Enter email: ";
-            cin >> email;
-
-            // Check if '@' exists exactly once and there is at least one '.' after '@'
-            size_t atPos = email.find('@');
-            size_t dotPos = email.find('.', atPos);
-
-            isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
-
-            if (!isValid) {
-                cout << "Invalid input. Email should contain '@' and '.'.\n";
-            }
-        } while (!isValid);
-    }
-
-    void inputValidContactNum() {
-        string contactNum;
-        bool isValid = true;
-
-        do {
-            cout << "Enter contact number: ";
-            cin >> contactNum;
-
-            if (contactNum.empty()) {
-                cout << "Contact Number should not be empty.\n";
-                isValid = false;
-            }
-            else if (contactNum.length() != 11) {
-                cout << "Invalid input. Contact number should contain 11 numbers only.\n";
-                isValid = false;
-            }
-            else {
-                for (char c : contactNum) {
-                    if (!isdigit(c)) {
-                        isValid = false;
-                        cout << "Invalid input. Contact number should only contain numbers and without spaces.";
-                    }
-                }
-            }
-        } while (!isValid);
-    }
-/*
-    void loginValidationUsername(CinemaSystem& system) {
-        string username;
-        bool isFound;
-
-        do {
-            cout << "Enter username: ";            
-            cin >> username;
-
-            if (username.empty()) {
-                cout << "Username should not be empty.\n";
-                isFound = false;
-            }
-            else if (!isFound) {
-                isFound = system.isUsernameExists(username);
-                if (!isFound) {
-                    cout << "This username does not exist. Please re-enter your username.\n";
-                }
-            }
-        } while (!isFound);
-    }
-
-    
-
-    void signupValidationUsername(CinemaSystem& system) {
-        string username;
-        bool isFound;
-
-        do {
-            cout << "Enter username: ";            
-            cin >> username;
-
-            if (username.empty()) {
-                cout << "Username should not be empty.\n";
-                isFound = true;
-            }
-            else if (username.length() < 5) {
-                cout << "Invalid input. Username should contain a minimum of 5 characters.\n";
-                isFound = true;
-            }
-            else {
-                isFound = system.isUsernameExists(username);
-                if (isFound) {
-                    cout << "This username already exists. Please re-enter your username.\n";
-                }
-            }
-        } while (username.empty() || username.length() < 5 || isFound);
-    }
-*/
-    void inputValidPassword() {
-        string password;
-        bool hasLetter = false;
-        bool hasDigit = false;
-
-        do {
-            cout << "Enter password: ";
-            getline(cin, password);
-
-            if (password.empty()) {
-                cout << "Password should not be empty.\n";
-            }
-            else if (password.length() < 8) {
-                cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
-            }
-            else {
-                for (char c : password) {
-                    if (isalnum(c)) {
-                        if (isalpha(c)) hasLetter = true;
-                        if (isdigit(c)) hasDigit = true;
-                    }
-            
-                    if (!hasLetter || !hasDigit) {
-                        cout << "Invalid input. Password should contain both number and password.\n";
-                    }
-                }
-            }
-        } while (password.empty() || password.length() < 8 || !hasLetter || !hasDigit);
-    }
-
-    // Exception Class for Validation
+    // exception Class for Validation
     class ValidationException {
     private:
         string message;
@@ -261,7 +107,7 @@ void inputValidName() {
         string what() const { return message; }
     };
 
-    // Abstract User Class for Admin and Customer
+    // abstract User Class for Admin and Customer
     class User {
     protected:
         string name, username, email, contactNumber, password;
@@ -280,9 +126,9 @@ void inputValidName() {
         string getUsername() { return username; }
         string getPassword() { return password; }
 
-        virtual void menu() = 0;  // Pure virtual function for strategy pattern
+        virtual void menu() = 0;  // pure virtual function for strategy pattern
 
-        // Logout functionality
+        // logout functionality
         void logout() const {
             cout << "Logging out..." << endl;
         }
@@ -367,6 +213,15 @@ void inputValidName() {
                 cout << endl;
             }
         }
+        // to search for the username
+        bool isUsernameExists(const string& username) {
+            for (int i = 0; i < userCount; i++) {
+                if(users[i]->getUsername() == username) {
+                    return true;
+                }
+            }
+            return false;
+        } 
         // getter
         int getUserCount() const {
             return userCount;
@@ -379,6 +234,155 @@ void inputValidName() {
 
     // definition of the static instance outside the class (for Singleton)
     CinemaSystem CinemaSystem::instance;
+
+    void inputValidName() {
+        string name;
+        bool isValid = true;
+        
+        do {
+            cout << "Enter name: ";
+            cin.ignore();
+            getline(cin, name);
+
+            if (name.empty()) {
+                cout << "Input should not be empty.\n";
+                isValid = false;
+            }
+            else {
+                for (char c : name) {
+                    if (!isalpha(c) && c != ' ') {
+                        isValid = false;
+                        cout << "Invalid input. Name should only contain letters.\n";
+                    }
+                }
+            }
+        } while (!isValid);
+    }
+
+    void inputValidEmail() {
+        string email;
+        bool isValid = false;
+
+        do {
+            cout << "Enter email: ";
+            cin >> email;
+
+            // check if '@' exists exactly once and there is at least one '.' after '@'
+            size_t atPos = email.find('@');
+            size_t dotPos = email.find('.', atPos);
+
+            isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
+
+            if (!isValid) {
+                cout << "Invalid input. Email should contain '@' and '.'.\n";
+            }
+        } while (!isValid);
+    }
+
+    void inputValidContactNum() {
+        string contactNum;
+        bool isValid = true;
+
+        do {
+            cout << "Enter contact number: ";
+            cin >> contactNum;
+
+            if (contactNum.empty()) {
+                cout << "Contact Number should not be empty.\n";
+                isValid = false;
+            }
+            else if (contactNum.length() != 11) {
+                cout << "Invalid input. Contact number should contain 11 numbers only.\n";
+                isValid = false;
+            }
+            else {
+                for (char c : contactNum) {
+                    if (!isdigit(c)) {
+                        isValid = false;
+                        cout << "Invalid input. Contact number should only contain numbers and without spaces.";
+                    }
+                }
+            }
+        } while (!isValid);
+    }
+
+    void loginValidationUsername(CinemaSystem& system) {
+        string username;
+        bool isFound;
+
+        do {
+            cout << "Enter username: ";            
+            cin >> username;
+
+            if (username.empty()) {
+                cout << "Username should not be empty.\n";
+                isFound = false;
+            }
+            else if (!isFound) {
+                isFound = system.isUsernameExists(username);
+                if (!isFound) {
+                    cout << "This username does not exist. Please re-enter your username.\n";
+                }
+            }
+        } while (!isFound);
+    }
+
+    
+
+    void signupValidationUsername(CinemaSystem& system) {
+        string username;
+        bool isFound;
+
+        do {
+            cout << "Enter username: ";            
+            cin >> username;
+
+            if (username.empty()) {
+                cout << "Username should not be empty.\n";
+                isFound = true;
+            }
+            else if (username.length() < 5) {
+                cout << "Invalid input. Username should contain a minimum of 5 characters.\n";
+                isFound = true;
+            }
+            else {
+                isFound = system.isUsernameExists(username);
+                if (isFound) {
+                    cout << "This username already exists. Please re-enter your username.\n";
+                }
+            }
+        } while (username.empty() || username.length() < 5 || isFound);
+    }
+
+    void inputValidPassword() {
+        string password;
+        bool hasLetter = false;
+        bool hasDigit = false;
+
+        do {
+            cout << "Enter password: ";
+            getline(cin, password);
+
+            if (password.empty()) {
+                cout << "Password should not be empty.\n";
+            }
+            else if (password.length() < 8) {
+                cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
+            }
+            else {
+                for (char c : password) {
+                    if (isalnum(c)) {
+                        if (isalpha(c)) hasLetter = true;
+                        if (isdigit(c)) hasDigit = true;
+                    }
+            
+                    if (!hasLetter || !hasDigit) {
+                        cout << "Invalid input. Password should contain both number and password.\n";
+                    }
+                }
+            }
+        } while (password.empty() || password.length() < 8 || !hasLetter || !hasDigit);
+    }
 
 class Ticket {
     private:
@@ -449,14 +453,14 @@ class Ticket {
             return price * quantity;
         }
 
-        // Method to assign seats
+        // method to assign seats
         void assignSeats(string* selectedSeats, int seatCount) {
             string seatList = "";
             for (int i = 0; i < seatCount; i++) {
                 if (i > 0) seatList += ", ";
                 seatList += selectedSeats[i];
             }
-            setSeats(seatList); // Update the seats
+            setSeats(seatList); // update the seats
         }
 
         void displayTicketDetails() const {
@@ -490,11 +494,11 @@ public:
 
     void removeFromCart(int index) {
         if (index >= 0 && index < itemCount) {
-            // Shift elements to remove the item at the specified index
+            // shift elements to remove the item at the specified index
             for (int i = index; i < itemCount - 1; i++) {
                 cartItems[i] = cartItems[i + 1];
             }
-            itemCount--; // Decrease the item count
+            itemCount--; // decrease the item count
         } else {
             cout << "Invalid cart index." << endl;
         }
@@ -560,7 +564,6 @@ public:
         }
 
 void refundTickets() {
-    // Now this function doesn't need parameters, it uses the member variables
     if (ticketCount == 0) {
         cout << "No tickets available for refund." << endl;
         return;
@@ -579,7 +582,7 @@ void refundTickets() {
         return;
     }
 
-    refundChoice--; // Adjust for zero-based index
+    refundChoice--; // adjust for zero-based index
 
     if (!ticketHistory[refundChoice].getIsValid()) {
         cout << "This ticket is already invalid." << endl;
@@ -601,28 +604,28 @@ void refundTickets() {
         string seats = ticketHistory[refundChoice].getSeats();
         int numSeats = ticketHistory[refundChoice].getQuantity();
 
-        // Free the seats using member variables
+        // free the seats using member variables
 for (int i = 0; i < numSeats; i++) {
-    string seatChoice = seats.substr(i * 3, 2);  // Get the seat label (e.g., "A1", "B2")
+    string seatChoice = seats.substr(i * 3, 2);  // get the seat label (e.g., "A1", "B2")
     
     if (seatChoice.size() < 2) {
         cout << "Invalid seat format: " << seatChoice << endl;
         continue;
     }
 
-    char rowChar = toupper(seatChoice[0]); // Get the row letter (e.g., 'A', 'B')
-    int row = rowChar - 'A'; // Convert row letter to index (e.g., 'A' -> 0, 'B' -> 1)
+    char rowChar = toupper(seatChoice[0]); // get the row letter (e.g., 'A', 'B')
+    int row = rowChar - 'A'; // convert row letter to index (e.g., 'A' -> 0, 'B' -> 1)
 
-    // Extract column from the seat (e.g., "A1" -> column "1")
-    int col = seatChoice[1] - '1';  // Convert '1' to 0, '2' to 1, etc.
+    // extract column from the seat (e.g., "A1" -> column "1")
+    int col = seatChoice[1] - '1';  // convert '1' to 0, '2' to 1, etc.
     
-    // Check if row and col are valid indices before accessing movieSeats
+    // check if row and col are valid indices before accessing movieSeats
     if (row < 0 || row >= 10 || col < 0 || col >= 10) {
         cout << "Invalid seat position: " << seatChoice << endl;
         continue;
     }
 
-    // Use the indices for the specific movie, location, date, and time
+    // use the indices for the specific movie, location, date, and time
     movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'O';
 }
 
@@ -695,44 +698,60 @@ for (int i = 0; i < numSeats; i++) {
 
         void searchMoviesMenu() {
             string keyword;
-            cout << "Enter search keyword (movie title or synopsis): ";
-            cin.ignore(); // Clear any previous input buffer
-            getline(cin, keyword);
+            char choice;
             
-            searchMovies(movies, keyword);
+            do {
+                cout << "Enter search keyword (movie title or synopsis): ";
+                cin.ignore();
+                getline(cin, keyword);
+                
+                searchMovies(movies, keyword);
+
+                cout << "Do you want to search again? (Y/N): ";
+                cin >> choice;
+
+            } while (choice == 'Y' || choice == 'y'); 
         }
 
         void sortMoviesMenu() {
             int sortChoice;
-            cout << endl << "Sort Movies By:" << endl;
-            cout << "1 - Title" << endl;
-            cout << "2 - Genre" << endl;
-            cout << "3 - Price" << endl;
-            cout << "Enter your choice (1-3): ";
-            cin >> sortChoice;
+            char choice;
+            
+            do {
+                cout << endl << "Sort Movies By:" << endl;
+                cout << "1 - Title" << endl;
+                cout << "2 - Genre" << endl;
+                cout << "3 - Price" << endl;
+                cout << "Enter your choice (1-3): ";
+                cin >> sortChoice;
 
-            switch (sortChoice) {
-            case 1:
-                sortMovies(movies, 5, 0);  // Sort by Title (column 0)
-                break;
-            case 2:
-                sortMovies(movies, 5, 1);  // Sort by Genre (column 1)
-                break;
-            case 3:
-                sortMovies(movies, 5, 3);  // Sort by Price (column 3)
-                break;
-            default:
-                cout << "Invalid choice. Returning to main menu." << endl;
-                return;
-            }
+                switch (sortChoice) {
+                case 1:
+                    sortMovies(movies, 5, 0);  // sort by Title (column 0)
+                    break;
+                case 2:
+                    sortMovies(movies, 5, 1);  // sort by Genre (column 1)
+                    break;
+                case 3:
+                    sortMovies(movies, 5, 3);  // sort by Price (column 3)
+                    break;
+                default:
+                    cout << "Invalid choice. Returning to main menu." << endl;
+                    return;
+                }
 
-            // Display sorted movies
-            cout << endl << "Movies sorted successfully:" << endl;
-            for (int i = 0; i < 5; i++) {
-                cout << "Title: " << movies[i][0] 
-                    << ", Genre: " << movies[i][1] 
-                    << ", Price: P" << movies[i][3] << endl;
-            }
+                // display sorted movies
+                cout << endl << "Movies sorted successfully:" << endl;
+                for (int i = 0; i < 5; i++) {
+                    cout << "Title: " << movies[i][0] 
+                        << ", Genre: " << movies[i][1] 
+                        << ", Price: P" << movies[i][3] << endl;
+                }
+
+                cout << "Do you want to sort again? (Y/N): ";
+                cin >> choice;
+
+            } while (choice == 'Y' || choice == 'y'); 
         }
 
         void profileMenu() {
@@ -829,11 +848,11 @@ for (int i = 0; i < numSeats; i++) {
             for (int movie = 0; movie < 5; movie++) {
                 int availableSeats = 0;
                 
-                // Array to store available locations
+                // array to store available locations
                 string availableLocations[3];
                 int availableLocationsCount = 0;
                 
-                // Check available seats for each location
+                // check available seats for each location
                 for (int locationIndex = 0; locationIndex < 3; locationIndex++) {
                     int locationSeats = 0;
                     for (int dateIndex = 0; dateIndex < 5; dateIndex++) {
@@ -849,7 +868,7 @@ for (int i = 0; i < numSeats; i++) {
                         }
                     }
                     
-                    // If location has available seats, add it to the array
+                    // if location has available seats, add it to the array
                     if (locationSeats > 0) {
                         string locationName = (locationIndex == 0 ? "Location A" :
                                             locationIndex == 1 ? "Location B" : "Location C");
@@ -857,14 +876,14 @@ for (int i = 0; i < numSeats; i++) {
                     }
                 }
 
-                // Display movie details
+                // display movie details
                 cout << endl << (movie + 1) << ". Movie Name: " << movies[movie][0] << endl;
                 cout << "   Synopsis: " << movies[movie][1] << endl;
                 cout << "   Runtime: " << movies[movie][2] << endl;
                 cout << "   Price: P" << movies[movie][3] << endl;
                 cout << "   Available Seats: " << availableSeats << endl;
                 
-                // Display available locations
+                // display available locations
                 cout << "   Available Locations: ";
                 for (int i = 0; i < availableLocationsCount; i++) {
                     cout << availableLocations[i];
@@ -915,12 +934,12 @@ for (int i = 0; i < numSeats; i++) {
             }
         }
 
-        // Function to sort movies using bubble sort
+        // function to sort movies using bubble sort
         void sortMovies(string movies[][5], int size, int column) {
             for (int i = 0; i < size - 1; i++) {
                 for (int j = 0; j < size - i - 1; j++) {
                     if (movies[j][column] > movies[j + 1][column]) {
-                        // Swap entire rows
+                        // swap entire rows
                         for (int k = 0; k < 5; k++) {
                             string temp = movies[j][k];
                             movies[j][k] = movies[j + 1][k];
@@ -994,10 +1013,10 @@ void checkoutCart() {
         return;
     }
 
-    // If more than one item in cart, let user choose which to checkout
+    // if more than one item in cart, let user choose which to checkout
     int selectedItemIndex = 0;
     if (cart.getItemCount() > 1) {
-        cart.viewCart(); // Display cart contents
+        cart.viewCart(); // display cart contents
         
         bool validSelection = false;
         do {
@@ -1010,7 +1029,7 @@ void checkoutCart() {
                 continue;
             }
             
-            // Adjust for zero-based indexing
+            // adjust for zero-based indexing
             selectedItemIndex--;
             
             if (selectedItemIndex >= 0 && selectedItemIndex < cart.getItemCount()) {
@@ -1021,7 +1040,7 @@ void checkoutCart() {
         } while (!validSelection);
     }
 
-    // Get ticket details from the cart item
+    // get ticket details from the cart item
     
     Ticket* selectedTicket = &cart.getCartItems()[selectedItemIndex];
 
@@ -1031,18 +1050,18 @@ void checkoutCart() {
     string time = selectedTicket->getShowTime();
     int seatCount = selectedTicket->getQuantity();
 
-    // Display available seats
+    // display available seats
     displaySeats(movieIndex, locationIndex, dateIndex, timeIndex);
 
     cout << endl;
 
-    // Book the selected seats
+    // book the selected seats
     string* selectedSeats = bookSeats(movieIndex, locationIndex, dateIndex, timeIndex, seatCount);
     
-    // Assign the selected seats to the ticket
+    // assign the selected seats to the ticket
     selectedTicket->assignSeats(selectedSeats, seatCount);
 
-    // Payment method selection (unchanged)
+    // payment method selection (unchanged)
     int paymentMethod;
     bool validPayment = false;
     do {
@@ -1063,9 +1082,9 @@ void checkoutCart() {
         }
     } while (!validPayment);
 
-    // Payment processing (unchanged)
+    // payment processing (unchanged)
     switch (paymentMethod) {
-        case 1: {  // Card Payment
+        case 1: {  // card Payment
             string cardNumber, expDate, cvc;
             cout << "Enter Card Number (16 digits): ";
             cin >> cardNumber;
@@ -1076,7 +1095,7 @@ void checkoutCart() {
             cout << endl << "Processing card payment..." << endl;
             break;
         }
-        case 2: {  // Bank Payment
+        case 2: {  // bank Payment
             string accountNumber, accountName;
             cout << "Enter Account Number: ";
             cin >> accountNumber;
@@ -1086,7 +1105,7 @@ void checkoutCart() {
             cout << endl << "Processing bank transfer..." << endl;
             break;
         }
-        case 3: {  // E-Wallet Payment
+        case 3: {  // e-Wallet Payment
             int ewalletChoice;
             string phoneNumber;
             cout << "Select E-Wallet:" << endl;
@@ -1105,21 +1124,21 @@ void checkoutCart() {
 
     cout << "Payment successful!" << endl;
 
-    // Process the selected ticket or all tickets
+    // process the selected ticket or all tickets
     Ticket* cartItems = cart.getCartItems();
     int cartItemCount = cart.getItemCount();
 
-    // Add selected ticket to ticket history
+    // add selected ticket to ticket history
     if (cartItemCount > 1) {
         if (ticketCount < 50) {
             ticketHistory[ticketCount++] = cartItems[selectedItemIndex];
-            // Remove the selected item from cart
+            // remove the selected item from cart
             cart.removeFromCart(selectedItemIndex);
         } else {
             cout << "Ticket history is full. Cannot add more tickets." << endl;
         }
     } else {
-        // If only one item, process the entire cart
+        // if only one item, process the entire cart
         for (int i = 0; i < cartItemCount; i++) {
             if (ticketCount < 50) {
                 ticketHistory[ticketCount++] = cartItems[i];
@@ -1216,7 +1235,7 @@ void checkoutCart() {
                     }
                 } while (!validDate);
 
-                // Choose a time
+                // choose a time
                 int timeChoice;
                 bool validTime = false;
                 do {
@@ -1238,7 +1257,7 @@ void checkoutCart() {
                     }
                 } while (!validTime);
 
-                // Store the selected date and time
+                // store the selected date and time
                 string selectedDate = availableDates[dateChoice - 1];
                 string selectedTime = times[timeChoice - 1];
 
@@ -1252,8 +1271,8 @@ void checkoutCart() {
                 cout << "Synopsis: " << movies[movieChoice][1] << endl;
                 cout << "Runtime: " << movies[movieChoice][2] << endl;
                 cout << "Location: " << selectedLocation << endl;
-                cout << "Date: " << selectedDate << endl;  // Display selected date
-                cout << "Time: " << selectedTime << endl; // Display selected time
+                cout << "Date: " << selectedDate << endl;  // display selected date
+                cout << "Time: " << selectedTime << endl; // display selected time
                 cout << "Price per ticket: P" << movies[movieChoice][3] << endl;
                 cout << "Available Seats: " << availableSeats << endl;
 
@@ -1293,10 +1312,8 @@ void checkoutCart() {
                 // display and book seats
                 //displaySeats(movieChoice, locationChoice - 1, dateIndex, timeIndex);
                 //string* bookedSeats = nullptr;
-                
 
-
-                // Add to cart or checkout prompt
+                // add to cart or checkout prompt
                 do {
                     cout << endl << "What do you want to do?" << endl;
                     cout << "1 - Add to Cart" << endl;
@@ -1309,7 +1326,7 @@ void checkoutCart() {
                     }
                 } while (addToCartChoice != '1' && addToCartChoice != '2');
 
-                // Create ticket object
+                // create ticket object
                 Ticket currentTicket(
                     movies[movieChoice][0], 
                     selectedLocation, 
@@ -1321,10 +1338,10 @@ void checkoutCart() {
                 );
 
                 if (addToCartChoice == '1') {
-                    // Add to cart
+                    // add to cart
                     cart.addToCart(currentTicket);
 
-                    // Ask if user wants to purchase more tickets
+                    // ask if user wants to purchase more tickets
                     do {
                         cout << endl << "Would you like to purchase more tickets? (Y/N): ";
                         cin >> purchaseMore;
@@ -1334,8 +1351,8 @@ void checkoutCart() {
                         }
                     } while (purchaseMore != 'Y' && purchaseMore != 'N');
                 }
-                else { // Checkout current ticket
-                    // Checkout process for the current ticket only
+                else { // checkout current ticket
+                    // checkout process for the current ticket only
                     // Now reserve the seats for checkout
 
                     displaySeats(movieChoice, locationChoice - 1, dateIndex, timeIndex);
@@ -1347,13 +1364,13 @@ void checkoutCart() {
                         selectedSeats += bookedSeats[i];
                     }
 
-                    // Update ticket with booked seats
+                    // update ticket with booked seats
                     currentTicket.setSeats(selectedSeats);
                     
                     cout << endl << "Proceeding to checkout for the current booking:" << endl;
                     currentTicket.displayTicketDetails();
 
-                    // Payment method selection
+                    // payment method selection
                     int paymentMethod;
                     bool validPayment = false;
                     do {
@@ -1374,9 +1391,9 @@ void checkoutCart() {
                         }
                     } while (!validPayment);
 
-                    // Handle payment based on selected method
+                    // handle payment based on selected method
                     switch (paymentMethod) {
-                        case 1: {  // Card Payment
+                        case 1: {  // card Payment
                             string cardNumber, expDate, cvc;
                             cout << "Enter Card Number (16 digits): ";
                             cin >> cardNumber;
@@ -1387,7 +1404,7 @@ void checkoutCart() {
                             cout << endl << "Processing card payment..." << endl;
                             break;
                         }
-                        case 2: {  // Bank Payment
+                        case 2: {  // bank Payment
                             string accountNumber, accountName;
                             cout << "Enter Account Number: ";
                             cin >> accountNumber;
@@ -1397,7 +1414,7 @@ void checkoutCart() {
                             cout << "Processing bank transfer..." << endl;
                             break;
                         }
-                        case 3: {  // E-Wallet Payment
+                        case 3: {  // e-Wallet Payment
                             int ewalletChoice;
                             string phoneNumber;
                             cout << "Select E-Wallet:" << endl;
@@ -1415,7 +1432,7 @@ void checkoutCart() {
 
                     cout << "Payment successful!" << endl;
 
-                    // Add current ticket directly to ticket history
+                    // add current ticket directly to ticket history
                     if (ticketCount < 50) {
                         ticketHistory[ticketCount++] = currentTicket;
                     } else {
@@ -1424,7 +1441,7 @@ void checkoutCart() {
 
                     cout << "Checkout for current booking completed successfully!" << endl;
 
-                    // Ask if the user wants to purchase more tickets
+                    // ask if the user wants to purchase more tickets
                     do {
                         cout << endl << "Would you like to purchase more tickets? (Y/N): ";
                         cin >> purchaseMore;
@@ -1455,7 +1472,7 @@ void checkoutCart() {
         }
     };
 
-    // Admin Class - Derived from User (Polymorphism)
+    // admin Class - Derived from User (Polymorphism)
     class Admin : public User {
     public:
         Admin(string nm, string uname, string mail, string contact, string pass)
@@ -1470,42 +1487,6 @@ void checkoutCart() {
             system.displayUsers();
         }
 
-        int getMovieIndex(const string& movieName) {
-    // Example logic to map movie names to indices
-    if (movieName == "Movie1") return 0;
-    if (movieName == "Movie2") return 1;
-    if (movieName == "Movie3") return 2;
-    // Add more mappings for other movies
-    return -1; // Invalid movie
-}
-
-int getLocationIndex(const string& location) {
-    // Example logic to map locations to indices
-    if (location == "Location1") return 0;
-    if (location == "Location2") return 1;
-    if (location == "Location3") return 2;
-    // Add more mappings for other locations
-    return -1; // Invalid location
-}
-
-int getDateIndex(const string& date) {
-    // Example logic to map dates to indices
-    if (date == "2024-12-01") return 0;
-    if (date == "2024-12-02") return 1;
-    if (date == "2024-12-03") return 2;
-    // Add more mappings for other dates
-    return -1; // Invalid date
-}
-
-int getTimeIndex(const string& showtime) {
-    // Example logic to map showtimes to indices
-    if (showtime == "10:00") return 0;
-    if (showtime == "14:00") return 1;
-    if (showtime == "18:00") return 2;
-    // Add more mappings for other showtimes
-    return -1; // Invalid showtime
-}
-
             void updateMovieDetails() {
             int movieChoice, detailChoice;
             bool continueUpdate = true;
@@ -1513,7 +1494,11 @@ int getTimeIndex(const string& showtime) {
             while (continueUpdate) {
                 // display movie list
                 for (int i = 0; i < 5; i++) {
-                    cout << (i + 1) << ". " << movies[i][0] << endl;
+                    cout << endl << "Movie " << (i + 1) << "." << endl;
+                    cout << endl << "Movie Name: " << movies[i][0] << endl;
+                    cout << "   Synopsis: " << movies[i][1] << endl;
+                    cout << "   Runtime: " << movies[i][2] << endl;
+                    cout << "   Price: P" << movies[i][3] << endl;
                 }
 
                 cout << "Select movie to update (0 to exit): ";
@@ -1632,7 +1617,6 @@ int getTimeIndex(const string& showtime) {
                 }
             } while (!validChoice);
 
-            // Confirm deletion
             char confirm;
             cout << "Are you sure you want to delete " << movies[movieChoice - 1][0] << "? (Y/N): ";
             cin >> confirm;
@@ -1644,13 +1628,13 @@ int getTimeIndex(const string& showtime) {
                     movies[movieChoice - 1][j] = "";
                 }
 
-                // Clear corresponding seats for the deleted movie
+                // clear corresponding seats for the deleted movie
                 for (int location = 0; location < 3; location++) {
                     for (int date = 0; date < 5; date++) {
                         for (int time = 0; time < 4; time++) {
                             for (int row = 0; row < 10; row++) {
                                 for (int col = 0; col < 10; col++) {
-                                    movieSeats[movieChoice - 1][location][date][time][row][col] = 'O';  // Reset to 'O'
+                                    movieSeats[movieChoice - 1][location][date][time][row][col] = 'O';  // reset to 'O'
                                 }
                             }
                         }
@@ -1663,18 +1647,20 @@ int getTimeIndex(const string& showtime) {
             }
         }
 
-    void refundManagement(CinemaSystem& system) {
+void refundManagement(CinemaSystem& system) {
     User** users = system.getUsers();
     int userCount = system.getUserCount();
 
-    Ticket* refundableTickets[5000];  // Array to store refundable tickets
+    Ticket* refundableTickets[5000];  // array to store refundable tickets
     int refundableCount = 0;
 
+    // collect all refundable tickets from all customers
     for (int i = 0; i < userCount; i++) {
         Customer* customer = dynamic_cast<Customer*>(users[i]);
         if (customer) {
             Ticket* tickets = customer->getTickets();
             for (int j = 0; j < customer->getTicketCount(); j++) {
+                // only add tickets that are valid and not yet refunded
                 if (tickets[j].getIsValid()) {
                     refundableTickets[refundableCount++] = &tickets[j];
                 }
@@ -1682,14 +1668,16 @@ int getTimeIndex(const string& showtime) {
         }
     }
 
+    // check if there are any refundable tickets
     if (refundableCount == 0) {
         cout << "No tickets available for refund." << endl;
         return;
     }
 
-    cout << "Refundable Tickets:" << endl;
+    // display refundable tickets
+    cout << endl << "Refundable Tickets:" << endl;
     for (int i = 0; i < refundableCount; i++) {
-        cout << "Ticket #" << (i + 1) << endl;
+        cout << endl << "Ticket #" << (i + 1) << endl;
         refundableTickets[i]->displayTicketDetails();
     }
 
@@ -1697,44 +1685,98 @@ int getTimeIndex(const string& showtime) {
     cout << "Enter the number of the ticket to refund (0 to cancel): ";
     cin >> choice;
 
+    // validate choice
     if (choice <= 0 || choice > refundableCount) {
         cout << "Refund cancelled." << endl;
         return;
     }
 
+    // select the ticket for refund
     Ticket* ticket = refundableTickets[choice - 1];
+
+    // calculate refund amount (70% of total price)
     double refundAmount = ticket->getTotalPrice() * 0.7;
 
-    // Get the movie, location, date, and time from ticket details
+    // get ticket details
     string movieName = ticket->getMovieName();
     string location = ticket->getLocation();
     string showtime = ticket->getShowTime();
+    string selectedDate = ticket->getSelectedDate();
 
-    // Use the movie, location, date, and time to determine the correct indices for movieSeats
-    int movieIndex = getMovieIndex(movieName);  // Implement a function to get movie index
-    int locationIndex = getLocationIndex(location);  // Implement a function to get location index
-    int dateIndex = getDateIndex(ticket->getSelectedDate());  // Implement a function to get date index
-    int timeIndex = getTimeIndex(showtime);  // Implement a function to get time index
-
-    // Free the seats
-    string seats = ticket->getSeats();
-    int numSeats = ticket->getQuantity();
-
-    for (int i = 0; i < numSeats; i++) {
-        char rowChar = seats[i * 4];  // Assuming seat row is at index 0, 4, 8, etc.
-        int row = toupper(rowChar) - 'A';  // Convert row character to index (A -> 0, B -> 1, etc.)
-        int col = seats[i * 4 + 1] - '0' - 1;  // Convert seat column number to index (1 -> 0, 2 -> 1, etc.)
-
-        // Ensure that the indices are valid and access the correct seat in movieSeats
-        if (row >= 0 && row < 10 && col >= 0 && col < 10) {
-            movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'O';  // Use the correct indices
-        } else {
-            cout << "Invalid seat index" << endl;
+    // find movie index
+    int movieIndex = -1;
+    for (int i = 0; i < 5; i++) {
+        if (movies[i][0] == movieName) {
+            movieIndex = i;
+            break;
         }
     }
 
+    // find location index
+    int locationIndex = -1;
+    string locations[] = {"Location A", "Location B", "Location C"};
+    for (int i = 0; i < 3; i++) {
+        if (locations[i] == location) {
+            locationIndex = i;
+            break;
+        }
+    }
+
+    // find date index
+    int dateIndex = -1;
+    for (int i = 0; i < 5; i++) {
+        if (availableDates[i] == selectedDate) {
+            dateIndex = i;
+            break;
+        }
+    }
+
+    // find time index
+    int timeIndex = -1;
+    for (int i = 0; i < 4; i++) {
+        if (times[i] == showtime) {
+            timeIndex = i;
+            break;
+        }
+    }
+
+    // validate all indices
+    if (movieIndex == -1 || locationIndex == -1 || dateIndex == -1 || timeIndex == -1) {
+        cout << "Error: Unable to process refund. Invalid ticket details." << endl;
+        return;
+    }
+
+    // get seats and free them
+    string seats = ticket->getSeats();
+    int numSeats = ticket->getQuantity();
+
+    // parse and free seats
+    stringstream ss(seats);
+    string seat;
+    while (getline(ss, seat, ',')) {
+        // trim whitespace
+        seat.erase(0, seat.find_first_not_of(" "));
+        seat.erase(seat.find_last_not_of(" ") + 1);
+
+        // convert seat to row and column
+        char rowChar = seat[0];
+        int row = toupper(rowChar) - 'A';
+        int col = stoi(seat.substr(1)) - 1;
+
+        // ensure valid indices
+        if (row >= 0 && row < 10 && col >= 0 && col < 10) {
+            movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'O';
+        } else {
+            cout << "Invalid seat: " << seat << endl;
+        }
+    }
+
+    // mark ticket as invalid
     ticket->setIsValid(false);
-    cout << "Refund processed: P" << refundAmount << endl;
+
+    // process refund
+    cout << "Refund processed: P" << fixed << setprecision(2) << refundAmount << endl;
+    cout << "Ticket for " << movieName << " at " << location << " has been refunded." << endl;
 }
 
         void deleteUser(CinemaSystem& system) {
@@ -1801,7 +1843,7 @@ int getTimeIndex(const string& showtime) {
         }
     };
 
-    // Main Menu Function
+    // main Menu Function
     void mainMenu(CinemaSystem& system) {
         string adminUsernames[5] = {"admin1", "admin2", "admin3", "admin4", "admin5"};
         int choice;
@@ -1838,7 +1880,7 @@ int getTimeIndex(const string& showtime) {
                         bool isAdmin = system.authenticateAdmin(username, password);
                         if (isAdmin) {
 
-                            // Find the admin user
+                            // find the admin user
                             for (int i = 0; i < system.getUserCount(); i++) {
                                 
                                 user = system.authenticateUser(username, password);
@@ -1886,10 +1928,15 @@ int getTimeIndex(const string& showtime) {
                     cout << endl << "Sign Up" << endl << endl;
                     cout << "Enter username: ";
                     cin >> username;
-                    inputValidPassword();
-                    inputValidName();
-                    inputValidEmail();
-                    inputValidContactNum();
+                    cout << "Enter password: ";
+                    cin >> password;
+                    cout << "Enter name: ";
+                    cin.ignore();
+                    getline(cin, name);
+                    cout << "Enter email: ";
+                    cin >> email;
+                    cout << "Enter contact number: ";
+                    cin >> contact;
 
                     // check if admin based on predefined usernames
                     for (const string& adminUsername : adminUsernames) {
