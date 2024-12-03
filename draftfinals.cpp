@@ -44,7 +44,7 @@
     void displaySeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex) {
         cout << "\nSeating Arrangement (O = Available, X = Taken):\n\n";
         cout << "  ";
-        for (int col = 1; col <= 10; ++col) {
+        for (int col = 1; col <= 10; col++) {
             cout << setw(2) << col << " ";
         }
         cout << endl;
@@ -62,7 +62,7 @@
     string* bookSeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex, int numTickets) {
         static string selectedSeats[15]; // max 15 tickets allowed
 
-        for (int i = 0; i < numTickets; ++i) {
+        for (int i = 0; i < numTickets; i++) {
             string seatChoice;
             bool validSeat = false;
 
@@ -411,7 +411,7 @@ class Ticket {
             }
 
             string result = "";
-            for (int i = 0; i < seatCount; ++i) {
+            for (int i = 0; i < seatCount; i++) {
                 result += formattedSeats[i];
                 if (i < seatCount - 1) {
                     result += ", ";
@@ -452,7 +452,7 @@ class Ticket {
         // Method to assign seats
         void assignSeats(string* selectedSeats, int seatCount) {
             string seatList = "";
-            for (int i = 0; i < seatCount; ++i) {
+            for (int i = 0; i < seatCount; i++) {
                 if (i > 0) seatList += ", ";
                 seatList += selectedSeats[i];
             }
@@ -917,11 +917,11 @@ for (int i = 0; i < numSeats; i++) {
 
         // Function to sort movies using bubble sort
         void sortMovies(string movies[][5], int size, int column) {
-            for (int i = 0; i < size - 1; ++i) {
-                for (int j = 0; j < size - i - 1; ++j) {
+            for (int i = 0; i < size - 1; i++) {
+                for (int j = 0; j < size - i - 1; j++) {
                     if (movies[j][column] > movies[j + 1][column]) {
                         // Swap entire rows
-                        for (int k = 0; k < 5; ++k) {
+                        for (int k = 0; k < 5; k++) {
                             string temp = movies[j][k];
                             movies[j][k] = movies[j + 1][k];
                             movies[j + 1][k] = temp;
@@ -1120,7 +1120,7 @@ void checkoutCart() {
         }
     } else {
         // If only one item, process the entire cart
-        for (int i = 0; i < cartItemCount; ++i) {
+        for (int i = 0; i < cartItemCount; i++) {
             if (ticketCount < 50) {
                 ticketHistory[ticketCount++] = cartItems[i];
             } else {
@@ -1199,7 +1199,7 @@ void checkoutCart() {
                 bool validDate = false;
                 do {
                     cout << endl << "Choose Date:" << endl;
-                    for (int i = 0; i < 5; ++i) {
+                    for (int i = 0; i < 5; i++) {
                         cout << (i + 1) << " - " << availableDates[i] << endl;
                     }
                     cout << "Enter the number corresponding to your choice (1-5): ";
@@ -1221,7 +1221,7 @@ void checkoutCart() {
                 bool validTime = false;
                 do {
                     cout << endl << "Choose Time:" << endl;
-                    for (int i = 0; i < 4; ++i) {
+                    for (int i = 0; i < 4; i++) {
                         cout << (i + 1) << " - " << times[i] << endl;
                     }
                     cout << "Enter the number corresponding to your choice (1-4): ";
@@ -1342,7 +1342,7 @@ void checkoutCart() {
                     string* bookedSeats = bookSeats(movieChoice, locationChoice - 1, dateIndex, timeIndex, numTickets);
 
                     string selectedSeats;
-                    for (int i = 0; i < numTickets; ++i) {
+                    for (int i = 0; i < numTickets; i++) {
                         if (i > 0) selectedSeats += ", ";
                         selectedSeats += bookedSeats[i];
                     }
@@ -1645,11 +1645,11 @@ int getTimeIndex(const string& showtime) {
                 }
 
                 // Clear corresponding seats for the deleted movie
-                for (int location = 0; location < 3; ++location) {
-                    for (int date = 0; date < 5; ++date) {
-                        for (int time = 0; time < 4; ++time) {
-                            for (int row = 0; row < 10; ++row) {
-                                for (int col = 0; col < 10; ++col) {
+                for (int location = 0; location < 3; location++) {
+                    for (int date = 0; date < 5; date++) {
+                        for (int time = 0; time < 4; time++) {
+                            for (int row = 0; row < 10; row++) {
+                                for (int col = 0; col < 10; col++) {
                                     movieSeats[movieChoice - 1][location][date][time][row][col] = 'O';  // Reset to 'O'
                                 }
                             }
