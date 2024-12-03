@@ -3,6 +3,7 @@
 #include <cctype>
 #include <limits>
 #include <sstream>
+
 using namespace std;
 
 class Ticket;
@@ -27,8 +28,7 @@ string availableDates[5] = {"Today", "December 5", "December 6", "December 7", "
 string times[4] = {"10 AM", "1 PM", "4 PM", "7 PM"};
 
 // initialization of seats to available ('O') for all movies and locations
-void initializeAllSeats()
-{
+void initializeAllSeats() {
     for (int movie = 0; movie < movieCount; movie++)
     {
         for (int location = 0; location < 3; location++)
@@ -50,48 +50,91 @@ void initializeAllSeats()
     }
 }
 
+    bool isEmpty(string input){
+
+        bool isEmpty = false;
+
+        if (input.length() == 0){
+            isEmpty = true;
+        }
+
+        return isEmpty;
+    }
+
 string inputValidName() {
         string name;
-        bool isValid = true;
-        
+        bool isValid;
+
         do {
+            bool isValid = true;
+            
             cout << "Enter name: ";
             getline(cin, name);
 
-            if (name.length() == 0) {
-                cout << "Input should not be empty.\n";
+            if (isEmpty(name)) {
+                cout << "Input should not be empty." << endl;
+                isValid = false;
+            }
+
+        } while (!isValid);
+
+        return name;
+    }
+
+string inputValidUsername() {
+        string username;
+        bool isValid = true;
+        
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        do {
+            cout << "Enter usename: ";
+            getline(cin, username);
+
+            if (isEmpty(username)) {
+                cout << "Input should not be empty." << endl;
+                isValid = false;
+                continue;
+            }
+
+            if (username.length() < 5) {
+                cout << "Minimum of 5 characters!" << endl;
                 isValid = false;
                 continue;
             }
             
             isValid = true;
-            for (char c : name) {
+            for (char c : username) {
                 if (!isalpha(c) && c != ' ') {
-                    cout << "Invalid input. Name should only contain letters.\n";
+                    cout << "Invalid input. Userame should only contain letters.\n";
                     isValid = false;
                     break;
                 }
             }
         } while (!isValid);
-        return name;
+        return username;
     }
 
     string inputValidPassword() {
         string password;
-        bool hasLetter = false;
-        bool hasDigit = false;
+        bool hasLetter;
+        bool hasDigit;
+        bool isValid;
 
         do {
-            cout << "Enter password: ";
-            getline(cin >> ws, password);
+            hasLetter = true;
+            hasDigit = true;
+            isValid = true;
 
-            if (password.empty()) {
+            cout << "Enter password: ";
+            getline(cin, password);
+
+            if (isEmpty(password)) {
                 cout << "Password should not be empty.\n";
+                isValid = false;
             }
             else if (password.length() < 8) {
                 cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
-                hasLetter = false;
-                hasDigit = false;
+                isValid = false;
             }
             else {
                 for (char c : password) {
@@ -106,24 +149,26 @@ string inputValidName() {
                 }
             }
 
-            if (!hasLetter || !hasDigit) {
+            if (!hasLetter && !hasDigit) {
                 cout << "Invalid input. Password should contain both number and password.\n";
             }
-        } while (!hasLetter || !hasDigit);
+        } while (!hasLetter || !hasDigit || !isValid);
         return password;
     }
 
     string inputValidEmail() {
         string email;
-        bool isValid = false;
+        bool isValid;
 
         do {
+            isValid = true;
+
             cout << "Enter email: ";
             getline(cin, email);
 
-            if (email.empty()) {
+            if (isEmpty(email)) {
                 cout << "Input should not be empty.\n";
-                continue;
+                isValid = false;
             }
 
             // Check if '@' exists exactly once and there is at least one '.' after '@'
@@ -136,7 +181,8 @@ string inputValidName() {
                 cout << "Invalid input. Email should contain '@' and a '.' after '@'.\n";
             }
         } while (!isValid);
-        string email;
+        
+        return email;
     }
 
     string inputValidContactNum() {
@@ -148,7 +194,7 @@ string inputValidName() {
             getline(cin, contactNum);
 
             isValid = true;
-            if (contactNum.empty()) {
+            if (isEmpty(contactNum)) {
                 cout << "Contact Number should not be empty.\n";
                 isValid = false;
             }
@@ -185,8 +231,7 @@ string capitalizeFirstLetters(string input) {
 }
 
 // display available seats for a specific movie and location
-void displaySeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex)
-{
+void displaySeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex) {
     cout << "\nSeating Arrangement (O = Available, X = Taken):\n\n";
     cout << "  ";
     for (int col = 1; col <= 10; col++)
@@ -206,8 +251,7 @@ void displaySeats(int movieIndex, int locationIndex, int dateIndex, int timeInde
     }
 }
 
-string *bookSeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex, int numTickets)
-{
+string *bookSeats(int movieIndex, int locationIndex, int dateIndex, int timeIndex, int numTickets) {
     static string selectedSeats[15];
 
     for (int i = 0; i < numTickets; i++)
@@ -254,8 +298,7 @@ string *bookSeats(int movieIndex, int locationIndex, int dateIndex, int timeInde
 }
 
 // exception Class for Validation
-class ValidationException
-{
+class ValidationException {
 private:
     string message;
 
@@ -265,8 +308,7 @@ public:
 };
 
 // abstract User Class for Admin and Customer
-class User
-{
+class User {
 protected:
     string name, username, email, contactNumber, password;
     bool isAdmin;
@@ -296,12 +338,14 @@ public:
     void logout() const
     {
         cout << "Logging out..." << endl;
+
+        system("pause");
+        system("cls");
     }
 };
 
 // CinemaSystem Class (Singleton Pattern)
-class CinemaSystem
-{
+class CinemaSystem {
 private:
     // static ++ private constructor for Singleton (ganto dba)
     static CinemaSystem instance;
@@ -427,65 +471,7 @@ public:
 // definition of the static instance outside the class (for Singleton)
 CinemaSystem CinemaSystem::instance;
 
-void loginValidationUsername(CinemaSystem &system)
-{
-    string username;
-    bool isFound;
-
-    do
-    {
-        cout << "Enter username: ";
-        cin >> username;
-
-        if (username.empty())
-        {
-            cout << "Username should not be empty.\n";
-            isFound = false;
-        }
-        else if (!isFound)
-        {
-            isFound = system.isUsernameExists(username);
-            if (!isFound)
-            {
-                cout << "This username does not exist. Please re-enter your username.\n";
-            }
-        }
-    } while (!isFound);
-}
-
-void signupValidationUsername(CinemaSystem &system)
-{
-    string username;
-    bool isFound;
-
-    do
-    {
-        cout << "Enter username: ";
-        cin >> username;
-
-        if (username.empty())
-        {
-            cout << "Username should not be empty.\n";
-            isFound = true;
-        }
-        else if (username.length() < 5)
-        {
-            cout << "Invalid input. Username should contain a minimum of 5 characters.\n";
-            isFound = true;
-        }
-        else
-        {
-            isFound = system.isUsernameExists(username);
-            if (isFound)
-            {
-                cout << "This username already exists. Please re-enter your username.\n";
-            }
-        }
-    } while (username.empty() || username.length() < 5 || isFound);
-}
-
-class Ticket
-{
+class Ticket {
 private:
     string movieName;
     string location;
@@ -496,8 +482,7 @@ private:
     bool isValid;
     string seats;
 
-string formatSeats(const string &seatInput, int quantity) const
-{
+string formatSeats(const string &seatInput, int quantity) const {
     string formattedSeats[100];
     int seatCount = 0;
     string currentSeat = "";
@@ -605,8 +590,7 @@ public:
     }
 };
 
-class Cart
-{
+class Cart {
 private:
     Ticket cartItems[15]; // max 15 tix in cart
     int itemCount;
@@ -649,7 +633,10 @@ public:
         if (itemCount == 0)
         {
             cout << endl
-                 << "Your cart is empty." << endl;
+                 << "Your cart is empty." << endl
+                 << endl << "Returning to Main Menu.." << endl;
+                    system("pause");
+                    system("cls");
             return;
         }
 
@@ -681,8 +668,7 @@ public:
     }
 };
 
-class Customer : public User
-{
+class Customer : public User {
 private:
     Ticket ticketHistory[50];
     Cart cart;
@@ -747,36 +733,46 @@ public:
             switch (choice)
             {
             case 1:
+                system("cls");
                 profileMenu();
                 break;
             case 2:
+                system("cls");
                 purchaseTickets();
                 break;
             case 3:
+                system("cls");
                 browseMovies();
                 break;
             case 4:
+                system("cls");
                 searchMoviesMenu();
                 break;
             case 5:
+                system("cls");
                 sortMoviesMenu();
                 break;
             case 6:
+                system("cls");
                 cartMenu();
                 break;
             case 7:
+                system("cls");
                 viewTickets();
                 break;
             case 8:
+                system("cls");
                 refundTickets();
                 break;
             case 9:
+                system("cls");
                 logout();
                 continueMenu = false;
                 break;
             case 10:
+                system("cls");
                 cout << endl
-                     << "Exiting the system." << endl;
+                     << "Exiting the CinemaSystem." << endl;
                 exit(0);
                 break;
             default:
@@ -1126,7 +1122,10 @@ void updateProfile()
             {
                 if (cart.getItemCount() == 0)
                 {
-                    cout << "Cart is empty." << endl;
+                    cout << endl << "Cart is empty." << endl;
+                    cout << endl << "Returning to Main Menu.." << endl;
+                    system("pause");
+                    system("cls");
                     break;
                 }
                 cart.viewCart();
@@ -1156,6 +1155,9 @@ void updateProfile()
     if (cart.getItemCount() == 0)
     {
         cout << "Cart is empty. Nothing to checkout." << endl;
+        cout << endl << "Returning to Main Menu.." << endl;
+        system("pause");
+        system("cls");
         return;
     }
 
@@ -1750,8 +1752,7 @@ void updateProfile()
     counter++;
     }
 
-bool findTicketIndices(const Ticket& ticket, int& movieIndex, int& locationIndex, int& dateIndex, int& timeIndex)
-{
+bool findTicketIndices(const Ticket& ticket, int& movieIndex, int& locationIndex, int& dateIndex, int& timeIndex) {
     // Find movie index
     movieIndex = -1;
     for (int i = 0; i < 10; i++) {
@@ -1783,11 +1784,13 @@ bool findTicketIndices(const Ticket& ticket, int& movieIndex, int& locationIndex
     return true;
 }
 
-void refundTickets()
-{
+void refundTickets() {
     if (ticketCount == 0)
     {
         cout << "No tickets available for refund." << endl;
+        cout << endl << "Returning to Main Menu.." << endl;
+        system("pause");
+        system("cls");
         return;
     }
 
@@ -1892,21 +1895,23 @@ void refundTickets()
 };
 
 // admin Class - Derived from User (Polymorphism)
-class Admin : public User
-{
+class Admin : public User {
 public:
     Admin(string nm, string uname, string mail, string contact, string pass)
         : User(nm, uname, mail, contact, pass, true) {}
 
-    void viewAllUsers(CinemaSystem &system)
+    void viewAllUsers(CinemaSystem &CinemaSystem)
     {
-        if (system.getUserCount() == 0)
+        if (CinemaSystem.getUserCount() == 0)
         {
             cout << "No users found." << endl;
+            cout << endl << "Returning to Main Menu.." << endl;
+            system("pause");
+            system("cls");
             return;
         }
 
-        system.displayUsers();
+        CinemaSystem.displayUsers();
     }
 
     void addMovie(string movies[10][5], int &movieCount, char movieSeats[10][3][5][4][10][10])
@@ -2123,6 +2128,9 @@ public:
             if (movieChoice == 0)
             {
                 cout << "Movie deletion cancelled." << endl;
+                cout << endl << "Returning to Main Menu.." << endl;
+                system("pause");
+                system("cls");
                 return;
             }
 
@@ -2175,10 +2183,10 @@ public:
         }
     }
 
-    void refundManagement(CinemaSystem &system)
+    void refundManagement(CinemaSystem &CinemaSystem)
     {
-        User **users = system.getUsers();
-        int userCount = system.getUserCount();
+        User **users = CinemaSystem.getUsers();
+        int userCount = CinemaSystem.getUserCount();
 
         Ticket *refundableTickets[5000]; // array to store refundable tickets
         int refundableCount = 0;
@@ -2205,6 +2213,9 @@ public:
         if (refundableCount == 0)
         {
             cout << "No tickets available for refund." << endl;
+            cout << endl << "Returning to Main Menu.." << endl;
+            system("pause");
+            system("cls");
             return;
         }
 
@@ -2330,12 +2341,12 @@ public:
         cout << "Ticket for " << movieName << " at " << location << " has been refunded." << endl;
     }
 
-    void deleteUser(CinemaSystem &system)
+    void deleteUser(CinemaSystem &CinemaSystem)
     {
-        system.displayUsers();
+        CinemaSystem.displayUsers();
         int choice;
 
-        for (int i = 0; i < system.getUserCount(); i++)
+        for (int i = 0; i < CinemaSystem.getUserCount(); i++)
         {
             //  cout <<
         }
@@ -2343,20 +2354,20 @@ public:
         cout << "Enter the user number to delete (0 to cancel): ";
         cin >> choice;
 
-        if (choice <= 0 || choice > system.getUserCount())
+        if (choice <= 0 || choice > CinemaSystem.getUserCount())
         {
             cout << "Deletion cancelled." << endl;
             return;
         }
 
-        system.deleteUser(choice - 1);
+        CinemaSystem.deleteUser(choice - 1);
         cout << "User deleted successfully." << endl;
     }
 
     void menu() override
     {
         int choice;
-        CinemaSystem &system = CinemaSystem::getInstance();
+        CinemaSystem &CinemaSystem = CinemaSystem::getInstance();
         bool continueMenu = true;
 
         while (continueMenu)
@@ -2378,30 +2389,36 @@ public:
             switch (choice)
             {
             case 1:
-                viewAllUsers(system);
+                system("cls");
+                viewAllUsers(CinemaSystem);
                 break;
             case 2:
+                system("cls");
                 addMovie(movies, movieCount, movieSeats);
                 break;
             case 3:
+                system("cls");
                 updateMovieDetails();
                 break;
             case 4:
+                system("cls");
                 deleteMovie();
                 break;
             case 5:
-                refundManagement(system);
+                refundManagement(CinemaSystem);
                 break;
             case 6:
-                deleteUser(system);
+                system("cls");
+                deleteUser(CinemaSystem);
                 break;
             case 7:
+                system("cls");
                 logout();
                 continueMenu = false;
                 break;
             case 8:
                 cout << endl
-                     << "Exiting the system." << endl;
+                     << "Exiting TouchMetro." << endl;
                 exit(0);
                 break;
             default:
@@ -2412,8 +2429,7 @@ public:
 };
 
 // main Menu Function
-void mainMenu(CinemaSystem &system)
-{
+void mainMenu(CinemaSystem &CinemaSystem) {
     string adminUsernames[5] = {"admin1", "admin2", "admin3", "admin4", "admin5"};
     int choice;
     bool continueMenu = true;
@@ -2462,8 +2478,7 @@ void mainMenu(CinemaSystem &system)
                     string username, password;
                     User *user = nullptr;
 
-                    cout << "Enter username (or '0' to return to main menu): ";
-                    cin >> username;
+                    username = inputValidUsername();
 
                     if (username == "0")
                     {
@@ -2471,18 +2486,18 @@ void mainMenu(CinemaSystem &system)
                         break;
                     }
                     
-                    inputValidPassword();
+                    password = inputValidPassword();
 
                     // check if it's an admin login
-                    bool isAdmin = system.authenticateAdmin(username, password);
+                    bool isAdmin = CinemaSystem.authenticateAdmin(username, password);
                     if (isAdmin)
                     {
 
                         // find the admin user
-                        for (int i = 0; i < system.getUserCount(); i++)
+                        for (int i = 0; i < CinemaSystem.getUserCount(); i++)
                         {
 
-                            user = system.authenticateUser(username, password);
+                            user = CinemaSystem.authenticateUser(username, password);
 
                             if (user && user->getIsAdmin())
                             {
@@ -2506,13 +2521,17 @@ void mainMenu(CinemaSystem &system)
                     }
 
                     // if hindi admin, check for customer login
-                    user = system.authenticateUser(username, password);
+                    user = CinemaSystem.authenticateUser(username, password);
 
                     if (user != nullptr)
                     {
                         cout << "Login successful." << endl;
 
                         Customer *customer = dynamic_cast<Customer *>(user);
+
+                    cout << endl << "Heading to Main Menu.." << endl;
+                    system("pause");
+                    system("cls");
 
                         if (customer)
                         {
@@ -2532,14 +2551,14 @@ void mainMenu(CinemaSystem &system)
                 string name, username, email, contact, password;
                 bool isAdmin = false;
 
-                
+                system("cls");
                 cout << endl << "Sign Up" << endl << endl;
-                cout << "Enter username: ";
-                cin >> username;
-                inputValidPassword();
-                inputValidName();
-                inputValidEmail();
-                inputValidContactNum();
+
+                username = inputValidUsername();
+                password = inputValidPassword();
+                name = inputValidName();
+                email = inputValidEmail();
+                contact = inputValidContactNum();
                 
 
 
@@ -2564,7 +2583,7 @@ void mainMenu(CinemaSystem &system)
                     {
                         newUser = new Customer(name, username, email, contact, password);
                     }
-                    system.addUser(newUser);
+                    CinemaSystem.addUser(newUser);
                     cout << endl
                         << "Sign-up successful. You can now log in." << endl;
                 }
@@ -2575,7 +2594,7 @@ void mainMenu(CinemaSystem &system)
                 break;
             }
             case 3:
-                cout << "Exiting the system. Goodbye!" << endl;
+                cout << "Exiting the CinemaSystem. Goodbye!" << endl;
                 continueMenu = false;
                 break;
             default:
@@ -2584,11 +2603,12 @@ void mainMenu(CinemaSystem &system)
     }
 }
 
-int main()
-{
-    CinemaSystem &system = CinemaSystem::getInstance();
+int main() {
+    
+    CinemaSystem &cinemaSystem = CinemaSystem::getInstance();
     initializeAllSeats();
-    mainMenu(system);
+    system("cls"); // Clear the console
+    mainMenu(cinemaSystem);
 
     return 0;
 }
