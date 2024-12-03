@@ -1,8 +1,8 @@
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <limits>
 #include <iomanip>
+#include <cctype>
+#include <limits>
+#include <sstream>
 using namespace std;
 
 class Ticket;
@@ -50,141 +50,138 @@ void initializeAllSeats()
     }
 }
 
-void inputValidName()
-{
-    string name;
-    bool isValid = true;
+string inputValidName() {
+        string name;
+        bool isValid = true;
+        
+        do {
+            cout << "Enter name: ";
+            getline(cin, name);
 
-    do
-    {
-        cout << "Enter name: ";
-        cin.ignore();
-        getline(cin, name);
-
-        isValid = true;
-        if (name.empty())
-        { // if ang input ay single int (ex. 2) dito napasok
-            cout << "Input should not be empty.\n";
-            isValid = false;
-        }
-        else
-        { // if series of number dito
-            for (char c : name)
-            {
-                if (isdigit(c) && c != ' ')
-                {
+            if (name.length() == 0) {
+                cout << "Input should not be empty.\n";
+                isValid = false;
+                continue;
+            }
+            
+            isValid = true;
+            for (char c : name) {
+                if (!isalpha(c) && c != ' ') {
                     cout << "Invalid input. Name should only contain letters.\n";
                     isValid = false;
                     break;
                 }
             }
-        }
-    } while (!isValid);
-}
+        } while (!isValid);
+        return name;
+    }
 
-void inputValidEmail()
-{
-    string email;
-    bool isValid = false;
+    string inputValidPassword() {
+        string password;
+        bool hasLetter = false;
+        bool hasDigit = false;
 
-    do
-    {
-        cout << "Enter email: ";
-        cin >> email;
+        do {
+            cout << "Enter password: ";
+            getline(cin >> ws, password);
 
-        // Check if '@' exists exactly once and there is at least one '.' after '@'
-        size_t atPos = email.find('@');
-        size_t dotPos = email.find('.', atPos);
-
-        isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
-
-        if (!isValid)
-        {
-            cout << "Invalid input. Email should contain '@' and '.'.\n";
-        }
-    } while (!isValid);
-}
-
-void inputValidContactNum()
-{
-    string contactNum;
-    bool isValid = true;
-
-    do
-    {
-        cout << "Enter contact number: ";
-        cin >> contactNum;
-
-        isValid = true;
-        if (contactNum.empty())
-        {
-            cout << "Contact Number should not be empty.\n";
-            isValid = false;
-        }
-        else if (contactNum.length() != 11)
-        {
-            cout << "Invalid input. Contact number should contain 11 numbers only.\n";
-            isValid = false;
-        }
-        else
-        {
-            for (char c : contactNum)
-            {
-                if (!isdigit(c))
-                {
-                    isValid = false;
-                    cout << "Invalid input. Contact number should only contain numbers and without spaces.";
-                }
+            if (password.empty()) {
+                cout << "Password should not be empty.\n";
             }
-        }
-    } while (!isValid);
-}
-
-void inputValidPassword()
-{
-    string password;
-    bool hasLetter = false;
-    bool hasDigit = false;
-
-    do
-    {
-        cout << "Enter password: ";
-        cin.ignore();
-        getline(cin, password);
-
-        if (password.empty())
-        {
-            cout << "Password should not be empty.\n";
-        }
-        else if (password.length() < 8)
-        {
-            cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
-            hasLetter = false;
-            hasDigit = false;
-        }
-        else
-        {
-            for (char c : password)
-            {
-                if (isalnum(c))
-                {
-                    if (isalpha(c))
-                    {
-                        hasLetter = true;
-                    }
-                    if (isdigit(c))
-                    {
-                        hasDigit = true;
+            else if (password.length() < 8) {
+                cout << "Invalid input. Password should contain a minimum of 8 characters.\n";
+                hasLetter = false;
+                hasDigit = false;
+            }
+            else {
+                for (char c : password) {
+                    if (isalnum(c)) {
+                        if (isalpha(c)) {
+                            hasLetter = true;
+                        }
+                        if (isdigit(c)) {
+                            hasDigit = true;
+                        }
                     }
                 }
             }
-        }
 
-        if (!hasLetter || !hasDigit)
-        {
-            cout << "Invalid input. Password should contain both number and password.\n";
+            if (!hasLetter || !hasDigit) {
+                cout << "Invalid input. Password should contain both number and password.\n";
+            }
+        } while (!hasLetter || !hasDigit);
+        return password;
+    }
+
+    string inputValidEmail() {
+        string email;
+        bool isValid = false;
+
+        do {
+            cout << "Enter email: ";
+            getline(cin, email);
+
+            if (email.empty()) {
+                cout << "Input should not be empty.\n";
+                continue;
+            }
+
+            // Check if '@' exists exactly once and there is at least one '.' after '@'
+            size_t atPos = email.find('@');
+            size_t dotPos = email.find('.', atPos);
+
+            isValid = (atPos != string::npos && dotPos != string::npos && atPos < dotPos);
+
+            if (!isValid) {
+                cout << "Invalid input. Email should contain '@' and a '.' after '@'.\n";
+            }
+        } while (!isValid);
+        string email;
+    }
+
+    string inputValidContactNum() {
+        string contactNum;
+        bool isValid = true;
+
+        do {
+            cout << "Enter contact number: ";
+            getline(cin, contactNum);
+
+            isValid = true;
+            if (contactNum.empty()) {
+                cout << "Contact Number should not be empty.\n";
+                isValid = false;
+            }
+            else if (contactNum.length() != 11) {
+                cout << "Invalid input. Contact number should contain 11 numbers only.\n";
+                isValid = false;
+            }
+            else {
+                for (char c : contactNum) {
+                    if (!isdigit(c)) {
+                        isValid = false;
+                        cout << "Invalid input. Contact number should only contain numbers and without spaces.";
+                    }
+                }
+            }
+        } while (!isValid);
+        return contactNum;
+    }
+
+string capitalizeFirstLetters(string input) {
+    bool capitalize = true;
+    for (size_t i = 0; i < input.length(); i++) {
+        if (capitalize && isalpha(input[i])) {
+            input[i] = toupper(input[i]);
+            capitalize = false;
+        } else {
+            input[i] = tolower(input[i]);
         }
-    } while (!hasLetter || !hasDigit);
+        if (isspace(input[i])) {
+            capitalize = true; // Next word
+        }
+    }
+    return input;
 }
 
 // display available seats for a specific movie and location
@@ -795,9 +792,10 @@ public:
 
         do
         {
-            cout << "Enter search keyword (movie title or genre): ";
+            cout << endl << "Enter search keyword (movie title or genre): ";
             cin.ignore();
             getline(cin, keyword);
+            keyword = capitalizeFirstLetters(keyword);
 
             searchMovies(movies, keyword);
 
@@ -825,13 +823,13 @@ public:
             switch (sortChoice)
             {
             case 1:
-                sortMovies(movies, 5, 0); // sort by Title (column 0)
+                sortMovies(movies, movieCount, 0); // sort by Title (column 0)
                 break;
             case 2:
-                sortMovies(movies, 5, 1); // sort by Genre (column 1)
+                sortMovies(movies, movieCount, 1); // sort by Genre (column 1)
                 break;
             case 3:
-                sortMovies(movies, 5, 3); // sort by Price (column 3)
+                sortMovies(movies, movieCount, 3); // sort by Price (column 3)
                 break;
             default:
                 cout << "Invalid choice. Returning to main menu." << endl;
@@ -848,7 +846,7 @@ public:
                      << ", Price: P" << movies[i][3] << endl;
             }
 
-            cout << "Do you want to sort again? (Y/N): ";
+            cout << endl << "Do you want to sort again? (Y/N): ";
             cin >> choice;
 
         } while (choice == 'Y' || choice == 'y');
@@ -894,7 +892,7 @@ public:
         }
     }
 
-    void updateProfile()
+void updateProfile()
     {
         int updateChoice;
         bool continueUpdate = true;
@@ -924,27 +922,22 @@ public:
                 cout << "Username updated successfully." << endl;
                 break;
             case 2:
-                cout << "Enter new password: ";
-                cin >> newValue;
+                newValue = inputValidPassword();
                 password = newValue;
                 cout << "Password updated successfully." << endl;
                 break;
             case 3:
-                cout << "Enter new name: ";
-                cin.ignore();
-                getline(cin, newValue);
+                newValue = inputValidName();
                 name = newValue;
                 cout << "Name updated successfully." << endl;
                 break;
             case 4:
-                cout << "Enter new phone number: ";
-                cin >> newValue;
+                newValue = inputValidContactNum();
                 contactNumber = newValue;
                 cout << "Phone number updated successfully." << endl;
                 break;
             case 5:
-                cout << "Enter new email: ";
-                cin >> newValue;
+                newValue = inputValidEmail();
                 email = newValue;
                 cout << "Email updated successfully." << endl;
                 break;
@@ -1048,7 +1041,7 @@ public:
         return false;
     }
 
-    void searchMovies(string movies[5][5], const string &keyword)
+    void searchMovies(string movies[][5], const string &keyword)
     {
         cout << "Search results for \"" << keyword << "\":" << endl;
         bool found = false;
@@ -1080,7 +1073,7 @@ public:
                 if (movies[j][column] > movies[j + 1][column])
                 {
                     // swap entire rows
-                    for (int k = 0; k < movieCount; k++)
+                    for (int k = 0; k < 5; k++)
                     {
                         string temp = movies[j][k];
                         movies[j][k] = movies[j + 1][k];
@@ -1930,9 +1923,13 @@ public:
             cout << "Adding a new movie" << endl
                  << endl;
 
+            string movieTitle;
             cout << "Enter Title: ";
             cin.ignore();
-            getline(cin, movies[movieCount][0]);
+
+            getline(cin, movieTitle);
+            movieTitle = capitalizeFirstLetters(movieTitle);
+            movies[movieCount][0] = movieTitle;
 
             cout << "Enter Genre: ";
             getline(cin, movies[movieCount][1]);
@@ -2006,14 +2003,14 @@ public:
                 cout << "   Price: P" << movies[i][3] << endl;
             }
 
-            cout << "Select movie to update (0 to exit): ";
+            cout << endl << "Select movie to update (0 to exit): ";
             cin >> movieChoice;
 
-            if (movieChoice == 0)
+            if (movieChoice == 0) 
                 break;
             movieChoice--;
 
-            if (movieChoice < 0 || movieChoice >= 5)
+            if (movieChoice < 0 || movieChoice >= movieCount)
             {
                 cout << "Invalid movie selection." << endl;
                 continue;
@@ -2129,7 +2126,7 @@ public:
                 return;
             }
 
-            if (movieChoice >= 1 && movieChoice <= 5 && !movies[movieChoice - 1][0].empty())
+            if (movieChoice >= 1 && movieChoice <= movieChoice && !movies[movieChoice - 1][0].empty())
             {
                 validChoice = true;
             }
@@ -2423,163 +2420,167 @@ void mainMenu(CinemaSystem &system)
 
     while (continueMenu)
     {
-        cout << endl
-             << "Main Menu" << endl
-             << endl;
-        cout << "1 - Login" << endl
-             << "2 - Sign Up" << endl
-             << "3 - Exit" << endl;
-        cout << endl
-             << "Enter your choice: ";
-        cin >> choice;
-
-        switch (choice)
+        try 
         {
-        case 1:
-        {
+            cout << endl
+                << "Main Menu" << endl
+                << endl;
+            cout << "1 - Login" << endl
+                << "2 - Sign Up" << endl
+                << "3 - Exit" << endl;
+            cout << endl
+                << "Enter your choice: ";
+            cin >> choice;
 
-            bool loginFinished = false;
-            bool returnToMainMenu = false;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw runtime_error("Invalid input. Please re-enter your choice.\n");
+            }
 
-            while (!loginFinished && !returnToMainMenu)
+            if (choice < 1 || choice > 3) {
+                throw out_of_range("Choice out of range. Please re-enter your choice.\n");
+            }
+
+        } catch (const runtime_error &e) {
+            cout << "Error: " << e.what() << endl;
+        } catch (const out_of_range &e) {
+            cout << "Error: " << e.what() << endl;
+        }
+
+            switch (choice)
+            {
+            case 1:
             {
 
-                string username, password;
-                User *user = nullptr;
+                bool loginFinished = false;
+                bool returnToMainMenu = false;
 
-                cout << "Enter username (or '0' to return to main menu): ";
-                cin >> username;
-
-                if (username == "0")
-                {
-                    returnToMainMenu = true;
-                    break;
-                }
-                cout << "Enter password: ";
-                cin >> password;
-
-                // check if it's an admin login
-                bool isAdmin = system.authenticateAdmin(username, password);
-                if (isAdmin)
+                while (!loginFinished && !returnToMainMenu)
                 {
 
-                    // find the admin user
-                    for (int i = 0; i < system.getUserCount(); i++)
+                    string username, password;
+                    User *user = nullptr;
+
+                    cout << "Enter username (or '0' to return to main menu): ";
+                    cin >> username;
+
+                    if (username == "0")
+                    {
+                        returnToMainMenu = true;
+                        break;
+                    }
+                    
+                    inputValidPassword();
+
+                    // check if it's an admin login
+                    bool isAdmin = system.authenticateAdmin(username, password);
+                    if (isAdmin)
                     {
 
-                        user = system.authenticateUser(username, password);
-
-                        if (user && user->getIsAdmin())
+                        // find the admin user
+                        for (int i = 0; i < system.getUserCount(); i++)
                         {
 
-                            Admin *admin = dynamic_cast<Admin *>(user);
+                            user = system.authenticateUser(username, password);
 
-                            if (admin)
+                            if (user && user->getIsAdmin())
                             {
-                                cout << "Admin login successful." << endl;
-                                admin->menu();
-                                loginFinished = true;
-                                break;
+
+                                Admin *admin = dynamic_cast<Admin *>(user);
+
+                                if (admin)
+                                {
+                                    cout << "Admin login successful." << endl;
+                                    admin->menu();
+                                    loginFinished = true;
+                                    break;
+                                }
                             }
+                        }
+
+                        if (loginFinished)
+                        {
+                            break;
                         }
                     }
 
-                    if (loginFinished)
+                    // if hindi admin, check for customer login
+                    user = system.authenticateUser(username, password);
+
+                    if (user != nullptr)
                     {
+                        cout << "Login successful." << endl;
+
+                        Customer *customer = dynamic_cast<Customer *>(user);
+
+                        if (customer)
+                        {
+                            customer->menu();
+                        }
+                        loginFinished = true;
+                    }
+                    else
+                    {
+                        cout << "Invalid credentials. Please try again." << endl;
+                    }
+                }
+                break;
+            }
+            case 2:
+            {
+                string name, username, email, contact, password;
+                bool isAdmin = false;
+
+                
+                cout << endl << "Sign Up" << endl << endl;
+                cout << "Enter username: ";
+                cin >> username;
+                inputValidPassword();
+                inputValidName();
+                inputValidEmail();
+                inputValidContactNum();
+                
+
+
+                // check if admin based on predefined usernames
+                for (const string &adminUsername : adminUsernames)
+                {
+                    if (username == adminUsername)
+                    {
+                        isAdmin = true;
                         break;
                     }
                 }
-
-                // if hindi admin, check for customer login
-                user = system.authenticateUser(username, password);
-
-                if (user != nullptr)
+                try
                 {
-                    cout << "Login successful." << endl;
-
-                    Customer *customer = dynamic_cast<Customer *>(user);
-
-                    if (customer)
+                    // creation of new admin/user acc
+                    User *newUser;
+                    if (isAdmin)
                     {
-                        customer->menu();
+                        newUser = new Admin(name, username, email, contact, password);
                     }
-                    loginFinished = true;
+                    else
+                    {
+                        newUser = new Customer(name, username, email, contact, password);
+                    }
+                    system.addUser(newUser);
+                    cout << endl
+                        << "Sign-up successful. You can now log in." << endl;
                 }
-                else
+                catch (ValidationException &ex)
                 {
-                    cout << "Invalid credentials. Please try again." << endl;
+                    cout << "Error: " << ex.what() << endl;
                 }
+                break;
             }
-            break;
-        }
-        case 2:
-        {
-            string name, username, email, contact, password;
-            bool isAdmin = false;
-
-            /*
-                                cout << endl << "Sign Up" << endl << endl;
-                                cout << "Enter username: ";
-                                cin >> username;
-                                inputValidPassword();
-                                inputValidName();
-                                inputValidEmail();
-                                inputValidContactNum();
-            */
-
-            cout << endl
-                 << "Sign Up" << endl
-                 << endl;
-            cout << "Enter username: ";
-            cin >> username;
-            cout << "Enter password: ";
-            cin >> password;
-            cout << "Enter name: ";
-            cin.ignore();
-            getline(cin, name);
-            cout << "Enter email: ";
-            cin >> email;
-            cout << "Enter contact number: ";
-            cin >> contact;
-
-            // check if admin based on predefined usernames
-            for (const string &adminUsername : adminUsernames)
-            {
-                if (username == adminUsername)
-                {
-                    isAdmin = true;
-                    break;
-                }
+            case 3:
+                cout << "Exiting the system. Goodbye!" << endl;
+                continueMenu = false;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
             }
-            try
-            {
-                // creation of new admin/user acc
-                User *newUser;
-                if (isAdmin)
-                {
-                    newUser = new Admin(name, username, email, contact, password);
-                }
-                else
-                {
-                    newUser = new Customer(name, username, email, contact, password);
-                }
-                system.addUser(newUser);
-                cout << endl
-                     << "Sign-up successful. You can now log in." << endl;
-            }
-            catch (ValidationException &ex)
-            {
-                cout << "Error: " << ex.what() << endl;
-            }
-            break;
-        }
-        case 3:
-            cout << "Exiting the system. Goodbye!" << endl;
-            continueMenu = false;
-            break;
-        default:
-            cout << "Invalid choice. Please try again." << endl;
-        }
     }
 }
 
