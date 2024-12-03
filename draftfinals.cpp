@@ -1776,7 +1776,7 @@ void refundManagement(CinemaSystem& system) {
         if (row >= 0 && row < 10 && col >= 0 && col < 10) {
             movieSeats[movieIndex][locationIndex][dateIndex][timeIndex][row][col] = 'O';
         } else {
-            cout << "Invalid seat: " << seat << endl;
+            // cout << "Invalid seat: " << seat << endl;
         }
     }
 
